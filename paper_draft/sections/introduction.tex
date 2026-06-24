@@ -1,0 +1,93 @@
+\section{Introduction}
+\label{sec:intro}
+
+Alignment research increasingly turns on null results. A red-team attack fails,
+a safety property holds under stress testing, or a training change leaves a
+behavioural metric unmoved. Researchers routinely read such a no-effect finding
+as good news: the model is robust. But a null is one of the most ambiguous
+outcomes an experiment can produce. ``Failure to reject $H_0$'' is, by
+construction, \emph{not} evidence for $H_0$~\citep{dale2024confirming}, and the
+same flat result can arise from at least three very different causes.
+
+\para{Three causes of a null.} A null can mean (i) \emph{genuine robustness}---the
+model truly is invariant to the manipulation; (ii) a \emph{weak intervention}---the
+attack was too weak, the sample too small, or the metric too coarse to detect a
+real effect; or (iii) a \emph{design flaw}---a confound that cancels a real
+effect, evaluation awareness, a broken measurement, or a hypothesis whose logical
+structure makes it unconfirmable in the first place~\citep{dale2024confirming,
+santosgrueiro2026limits}. These three readings carry opposite implications for
+what a researcher should do next, yet the standard statistical apparatus reports
+the same $p > 0.05$ for all of them. Mis-reading a null wastes research effort
+and, worse, can ship false confidence in a model's safety---declaring ``robust''
+when the attack was simply too weak, or when a confound masked a real
+vulnerability.
+
+\para{Why existing tools are not enough.} Two literatures each solve half of the
+problem. Bayesian model criticism can \emph{quantify} evidence for a null and
+gauge whether an experiment had the power to detect an effect, through Bayes
+factors, relative belief ratios, and posterior predictive
+checks~\citep{rouder2009bayesian, moran2022ppn, robert2016demise}. But it is
+blind to the logical structure of the experiment: a confound that cancels a real
+effect looks like a clean null, and a two-sided point null is statistically
+testable yet logically \emph{unconfirmable}~\citep{dale2024confirming}.
+Conversely, symbolic and neurosymbolic reasoning can encode \emph{why} a null is
+or is not interpretable---through confirmability topology and
+identifiability/equivalence-class arguments~\citep{dale2024confirming,
+santosgrueiro2026limits, tran2025neurosymbolic}---but cannot, on its own, tell a
+genuinely-null effect from a real-but-underpowered one, because that distinction
+needs sample size and measurement noise. And critically, \emph{no public dataset
+labels the cause of a null}: every alignment-evaluation set diagnoses models, not
+the epistemic status of a no-effect finding. The fusion of the two views, and a
+benchmark to measure it, are both missing.
+
+\para{Our approach.} We propose a hybrid Bayesian--symbolic diagnostic that
+classifies the cause of a null result into \GR, \WI, or \DF, each with an
+interpretable reasoning chain. A symbolic layer first gates confirmability and
+identifiability, catching design flaws that statistical evidence cannot see.
+Within the admissible structure, the framework requires \emph{all three}
+interpretable adequacy checks---adequate sample, precise measurement, and
+substantive intervention---to declare robustness; any failure routes the null to
+weak intervention while naming the failed check. Because the two layers observe
+disjoint, complementary inputs (sample size and noise on the Bayesian side;
+structural flags and intervention strength on the symbolic side), only their
+fusion holds all the signals needed to separate the three causes. We evaluate on
+a literature-grounded, ground-truth-labelled generator, the only way to directly
+measure three-way cause accuracy given the dataset gap above.
+
+\para{Results preview.} On 3{,}000 held-out scenarios, the hybrid reaches a
+three-way macro-F1 of $0.991$, against $0.871$ for symbolic-only, $0.489$ for
+Bayesian-only, $0.326$ for equivalence-test-only, and $0.244$ for naive NHST---a
+gain of $+0.12$ over the strongest single modality and more than $4\times$ over
+the naive baseline, with non-overlapping bootstrap confidence intervals and
+Holm-corrected McNemar tests at $p \ll 0.001$. The gain is mechanistic: the
+Bayesian view never recovers a single design flaw ($\textsc{F1}=0.00$), while the
+symbolic view mislabels $371/989$ underpowered cases as robustness; the hybrid
+resolves both, leaving only $28/3{,}000$ errors. A frontier large language model
+(GPT-4.1) given identical information scores $0.888$, competitive with the
+symbolic baseline but well below the hybrid on the same items.
+
+\para{Contributions.} We make the following contributions:
+\begin{itemize}[leftmargin=*,itemsep=0pt,topsep=0pt]
+  \item We formalise the interpretation of a null result in alignment experiments
+        as a three-way cause-classification problem (\GR vs.\ \WI vs.\ \DF), and
+        argue that resolving it requires \emph{both} statistical-adequacy signals
+        and structural/identifiability signals.
+  \item We propose a hybrid Bayesian--symbolic diagnostic that gates
+        confirmability symbolically and quantifies evidence and power with a JZS
+        Bayes factor, fusing the two into a calibrated, interpretable three-way
+        classifier.
+  \item We build a literature-grounded, ground-truth-labelled benchmark of null
+        causes---to our knowledge the first---and show the hybrid beats
+        Bayesian-only, symbolic-only, and two statistics-only baselines by wide,
+        statistically significant margins, with a confusion analysis that pins
+        each modality's blind spot.
+  \item We add an external check with a frontier LLM expert judge (GPT-4.1) and a
+        prior-sensitivity sweep, showing the structured framework adds value a
+        strong general reasoner does not supply for free, and is robust to prior
+        specification.
+\end{itemize}
+
+The rest of the paper reviews related work (\secref{sec:related}), describes the
+framework, benchmark, and evaluation protocol (\secref{sec:method}), reports
+results (\secref{sec:results}), discusses interpretation and limitations
+(\secref{sec:discussion}), and concludes (\secref{sec:conclusion}).

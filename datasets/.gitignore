@@ -1,0 +1,10 @@
+# Exclude generated/large data files (deterministically regenerable)
+*.csv
+*.jsonl
+
+# But keep documentation, generators, and small samples
+!.gitignore
+!README.md
+!**/README.md
+!**/generate.py
+!**/samples.jsonl

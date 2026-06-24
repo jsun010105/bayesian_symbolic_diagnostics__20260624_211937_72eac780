@@ -1,0 +1,20 @@
+[
+  {
+    "true": "GENUINE_ROBUSTNESS",
+    "predicted": "GENUINE_ROBUSTNESS",
+    "confidence": 0.75,
+    "reasoning_chain": "[Symbolic gate] clean, identifiable & confirmable design (no confound/eval-awareness, valid measurement, equivalence margin +/-0.15 set). [Bayesian] adequate sample (n=100) and precise measurement (sd=1.52); [Symbolic] substantive intervention (strength=0.64) still found nothing (BF01=5.50) -> GENUINE_ROBUSTNESS."
+  },
+  {
+    "true": "WEAK_INTERVENTION",
+    "predicted": "WEAK_INTERVENTION",
+    "confidence": 0.7,
+    "reasoning_chain": "[Symbolic gate] clean, identifiable & confirmable design (no confound/eval-awareness, valid measurement, equivalence margin +/-0.20 set). [Bayesian] inadequate sample (n=20 < 50) [Symbolic] weak intervention (strength=0.17 < 0.5) -> a real effect could be masked -> WEAK_INTERVENTION."
+  },
+  {
+    "true": "DESIGN_FLAW",
+    "predicted": "DESIGN_FLAW",
+    "confidence": 0.84,
+    "reasoning_chain": "[Symbolic gate] Design-flaw gate fired: evaluation-awareness (D1); non-identifiable (D1). [Hybrid] structure uninterpretable -> DESIGN_FLAW."
+  }
+]

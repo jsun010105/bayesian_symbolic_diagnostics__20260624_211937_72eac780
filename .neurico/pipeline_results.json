@@ -1,0 +1,27 @@
+{
+  "success": true,
+  "stages": {
+    "resource_finder": {
+      "success": true,
+      "completion_marker": "/workspaces/bayesian_symbolic_diagnostics__20260624_211937_72eac780/.resource_finder_complete",
+      "outputs": {
+        "literature_review": "/workspaces/bayesian_symbolic_diagnostics__20260624_211937_72eac780/literature_review.md",
+        "resources_catalog": "/workspaces/bayesian_symbolic_diagnostics__20260624_211937_72eac780/resources.md",
+        "papers_dir": "/workspaces/bayesian_symbolic_diagnostics__20260624_211937_72eac780/papers",
+        "datasets_dir": "/workspaces/bayesian_symbolic_diagnostics__20260624_211937_72eac780/datasets",
+        "code_dir": "/workspaces/bayesian_symbolic_diagnostics__20260624_211937_72eac780/code"
+      },
+      "log_file": "/workspaces/bayesian_symbolic_diagnostics__20260624_211937_72eac780/logs/resource_finder_claude.log",
+      "transcript_file": "/workspaces/bayesian_symbolic_diagnostics__20260624_211937_72eac780/logs/resource_finder_claude_transcript.jsonl",
+      "elapsed_time": 813.6388339996338
+    },
+    "experiment_runner": {
+      "success": true,
+      "return_code": 0,
+      "elapsed_time": 1405.5438680648804,
+      "log_file": "/workspaces/bayesian_symbolic_diagnostics__20260624_211937_72eac780/logs/execution_claude.log",
+      "transcript_file": "/workspaces/bayesian_symbolic_diagnostics__20260624_211937_72eac780/logs/execution_claude_transcript.jsonl"
+    }
+  },
+  "work_dir": "/workspaces/bayesian_symbolic_diagnostics__20260624_211937_72eac780"
+}

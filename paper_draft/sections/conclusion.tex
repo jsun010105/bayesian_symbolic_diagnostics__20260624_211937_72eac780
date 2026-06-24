@@ -1,0 +1,27 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+We asked whether a hybrid Bayesian--symbolic framework can distinguish genuine
+robustness from a weak intervention and from a design flaw as the cause of a null
+result in an alignment experiment, more accurately than either modality alone. The
+answer is yes. Fusing Bayesian evidence and power quantification with symbolic
+reasoning about experimental structure classifies the cause of a null at
+\macrofone $0.991$ on a held-out benchmark, far above Bayesian-only ($0.489$),
+symbolic-only ($0.871$), naive NHST ($0.244$), equivalence-test-only ($0.326$), and
+a frontier LLM given identical information ($0.888$). The reason is mechanistic:
+fusion is the only approach that observes both the statistical-adequacy signals and
+the structural/identifiability signals, and it delivers its verdicts as transparent,
+actionable reasoning chains.
+
+\para{Key takeaway.} An evidence layer and a structure layer are each necessary but
+individually blind---to design flaws and to power respectively---and only their
+fusion can read a null correctly.
+
+\para{Future work.} We see five concrete next steps. (1) Validate on semi-synthetic
+scenarios anchored on real \harmbench{} attack-success structure, and ultimately on
+a small human-expert-labelled corpus of published alignment nulls. (2) Replace the
+fixed thresholds with per-study power analyses and a measurement-validity audit.
+(3) Post-hoc calibrate the confidences and emit partial-cause (multi-label)
+decompositions for nulls with compound causes. (4) Convene a human-expert panel to
+measure inter-annotator $\kappa$. (5) Stress-test threshold sensitivity as
+thoroughly as we tested prior sensitivity here.

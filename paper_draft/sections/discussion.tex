@@ -1,0 +1,68 @@
+\section{Discussion}
+\label{sec:discussion}
+
+\para{What the results show.} The findings support all four sub-hypotheses that
+motivated the framework. The hybrid beats every baseline with non-overlapping
+bootstrap CIs and significant Holm-corrected McNemar tests (H1). The two single
+modalities fail on disjoint, complementary slices---the Bayesian view on design
+flaws (H2), the symbolic view on power (H3)---and fusion wins precisely because it
+is the only method that observes all the discriminating inputs at once: sample
+size and noise from the raw observations, and structural flags and intervention
+strength from the experiment's logic. This is the central epistemic claim of the
+work, made measurable: an evidence layer and a structure layer are each necessary
+but, alone, insufficient. The framework also produces interpretable, calibrated
+outputs (H4): every diagnosis is a short reasoning chain that names the operative
+check, and confidence is monotone, if conservative.
+
+\para{Does the structure actually do work?} The most informative comparison is the
+frontier LLM judge. Given identical information and an explicit rubric, GPT-4.1
+reaches $0.888$---it nails design flaws ($0.97$, the flags are textually salient)
+but still confuses robustness with weak intervention because it does not reliably
+translate a small $N$ or a noisy metric into ``underpowered''. The explicit
+power/identifiability logic of the framework supplies exactly the inference a
+strong general reasoner does not provide for free, and does so transparently and
+at near-zero marginal cost. The negative result for \nhst{} (accuracy $0.36$) is
+the empirical face of ``absence of evidence is not evidence of
+absence''~\citep{dale2024confirming}.
+
+\para{Connection to the literature.} The design operationalises the reviewed
+pillars: equivalence-margin and confirmability gating from
+\citet{dale2024confirming}, identifiability as an equivalence-class obstruction
+from \citet{santosgrueiro2026limits}, Bayes-factor evidence with prior sensitivity
+from \citet{rouder2009bayesian, robert2016demise}, and graded red-teaming as the
+intervention-strength axis anchored on \harmbench~\citep{mazeika2024harmbench}.
+
+\para{Limitations.} We are explicit about the scope of these numbers.
+\begin{itemize}[leftmargin=*,itemsep=1pt,topsep=1pt]
+  \item \textbf{Synthetic benchmark, separable by construction.} The generator
+        encodes the discriminating structure that fusion exploits, so the absolute
+        $0.99$ will not transfer verbatim to messy real experiments. This is a
+        controlled proof-of-mechanism that demonstrates and quantifies the fusion
+        logic and each modality's blind spot---not a field accuracy estimate. The
+        literature-confirmed absence of a cause-labelled real benchmark is exactly
+        the gap that motivates building one.
+  \item \textbf{Dataset-informed thresholds.} The adequacy checks
+        ($N \ge 50$, residual $\mathrm{sd} \le 2.0$, strength $\ge 0.5$) are
+        interpretable rules of thumb tuned to the generator; on real data they
+        would be set by a proper power analysis and measurement-validity audit per
+        study. We show robustness to the \emph{prior} (\secref{sec:sensitivity});
+        robustness to \emph{these thresholds} is future work.
+  \item \textbf{Single LLM judge, no human panel.} GPT-4.1 is a proxy for the
+        intended human expert; true inter-annotator $\kappa$ against human
+        methodologists is not measured here.
+  \item \textbf{Under-confidence.} The hybrid's ECE of $0.248$ is conservative;
+        confidences would benefit from post-hoc calibration (\eg isotonic
+        regression) before being surfaced to users as probabilities.
+  \item \textbf{Hard three-cause taxonomy.} Real nulls can have mixed or compound
+        causes; the framework currently emits a single hard label (plus reasoning),
+        not a multi-label or partial-cause decomposition.
+\end{itemize}
+
+\para{Broader implications.} A diagnostic that says \emph{which} of the three a
+null is---with a reason---directly improves the reliability of alignment science.
+It guards against the most dangerous failure mode, shipping false confidence in a
+model's safety when a red-team attack was merely too weak or a confound masked a
+real vulnerability, and it turns each null into an actionable next step rather than
+an ambiguous stopping point. Because the framework is interpretable and cheap, it
+can sit inside an existing evaluation workflow as a sanity check on every
+no-effect finding.

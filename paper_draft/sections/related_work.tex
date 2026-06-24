@@ -1,0 +1,64 @@
+\section{Related Work}
+\label{sec:related}
+
+Our framework sits at the intersection of four lines of work: Bayesian evidence
+quantification, the logic of confirming a null, neurosymbolic reasoning, and
+alignment evaluation. We organise the discussion by these themes and position our
+contribution---the \emph{fusion} of the first two, grounded in the fourth---against
+each.
+
+\para{Bayesian evidence and model criticism.} A core difficulty with nulls is that
+NHST cannot express evidence \emph{for} $H_0$. Bayesian methods can. Bayes factors
+and the JZS prior of \citet{rouder2009bayesian} give a principled scalar of
+evidence for the null, and relative belief ratios offer an alternative measure of
+evidence strength~\citep{evans2023measure}. The posterior predictive null of
+\citet{moran2022ppn} reframes model criticism as a comparative check---whether a
+simpler model is \emph{necessary} rather than merely sufficient---which is exactly
+the genuine-robustness-versus-weak-intervention distinction at the level of model
+complexity. These tools quantify and aggregate evidence~\citep{vandeschoot2025bf},
+but they are known to be fragile to prior specification~\citep{robert2016demise},
+and---central to our argument---they are blind to the experiment's logical
+structure. We use a JZS Bayes factor as the evidence core of our Bayesian layer
+and run a prior-sensitivity sweep, but we wrap it in a symbolic gate it cannot
+supply on its own.
+
+\para{The logic of confirming a null.} \citet{dale2024confirming} show, via a modal
+logic of frequentist confirmation, that a hypothesis is confirmable iff it has
+nonempty topological interior: two-sided point nulls ($\theta = \theta_0$) are
+\emph{not} confirmable, whereas equivalence/non-inferiority hypotheses
+($\theta \in [L,U]$) are. This gives a crisp, automatable rule for deciding when a
+null is even \emph{eligible} to mean robustness, and identifies the
+``inconclusive'' outcome as the signature of an underpowered experiment. We
+operationalise this result as the confirmability component of our symbolic
+gate---a structural test that pure Bayesian evidence does not surface.
+
+\para{Neurosymbolic representation.} Neurosymbolic systems encode domain knowledge
+as logical formulae with confidence/penalty weights and reason over
+them~\citep{tran2025neurosymbolic}. The relevant pattern for us is weighted
+logical constraints capturing experimental assumptions and intervention logic,
+combined with quantitative evidence. Our symbolic layer is a weighted rule system
+over structural flags (confound, evaluation awareness, measurement validity,
+identifiability, hypothesis topology, intervention strength); the hybrid composes
+it with the Bayesian layer rather than learning a joint energy model, keeping the
+diagnosis transparent.
+
+\para{Alignment evaluation, identifiability, and red-teaming.}
+\citet{santosgrueiro2026limits} frame alignment evaluation as a statistical
+identifiability problem under partial observability: under finite,
+evaluation-aware testing, observed compliance identifies only an equivalence class
+of policies, not a unique latent property---so a passed safety eval may reflect
+genuine alignment \emph{or} an indistinguishable conditionally-compliant policy.
+This is the alignment-specific face of our design-flaw and weak-intervention
+classes, and the rationale for adding a structural layer. The application domain
+is supplied by automated red-teaming: \harmbench~\citep{mazeika2024harmbench}
+standardises attacks of graded strength against many models, producing the
+realistic null-ish results (``attack failed $\Rightarrow$ robust'') whose
+intervention-strength axis we anchor our generator on.
+
+\para{Positioning.} Prior work uses Bayesian or symbolic tools \emph{separately}
+for null interpretation, and---confirmed by our literature survey---no public
+dataset labels the \emph{cause} of a null. Unlike the Bayesian line, we reason
+explicitly about confirmability and identifiability; unlike the symbolic line, we
+quantify evidence and power; and unlike both, we measure three-way cause accuracy
+on a ground-truth benchmark and compare against a frontier-LLM expert judge. The
+explicit fusion, and the benchmark to evaluate it, are our novel contributions.

@@ -1,0 +1,24 @@
+A null result in an alignment experiment---``the attack failed'', ``the safety
+property held'', ``the training change had no measurable effect''---is
+epistemically ambiguous: it can signal \emph{genuine robustness}, a
+\emph{weak or underpowered intervention}, or a \emph{design flaw} (a confound,
+a broken metric, evaluation awareness, or a logically unconfirmable hypothesis).
+Classical null-hypothesis significance testing cannot separate these cases,
+because ``failure to reject $H_0$'' is not evidence for $H_0$. We propose a
+hybrid Bayesian--symbolic diagnostic that fuses two complementary views: a
+symbolic layer that gates confirmability and identifiability, and a Bayesian
+layer that quantifies statistical evidence and power. The two are combined into
+a three-way classification of the cause of a null, with a human-readable
+reasoning chain. On a ground-truth-labelled benchmark of 3{,}000 held-out
+scenarios, our hybrid reaches a three-way macro-F1 of $0.991$ (95\% bootstrap CI
+$[0.987, 0.994]$), far above every single-modality baseline: symbolic-only
+$0.871$, Bayesian-only $0.489$, equivalence-test-only $0.326$, and naive NHST
+$0.244$ (all gaps significant under Holm-corrected McNemar tests,
+$p \ll 0.001$). The improvement is mechanistic: the Bayesian view is structurally
+blind to design flaws ($\textsc{F1}=0.00$), while the symbolic view cannot see
+sample size or noise and mislabels $371/989$ underpowered cases as robustness;
+only the fusion observes both signals. A frontier large language model
+(GPT-4.1) given the same information scores $0.888$---competitive with the
+symbolic baseline but well below the hybrid. Fusing evidence with structure
+distinguishes the causes of a null more accurately than either view, or a strong
+general reasoner, alone, while producing interpretable, actionable diagnoses.

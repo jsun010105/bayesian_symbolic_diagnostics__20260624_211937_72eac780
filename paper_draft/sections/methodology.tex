@@ -1,0 +1,96 @@
+\section{Methodology}
+\label{sec:method}
+
+\subsection{Problem formulation}
+
+Each experiment yields a null result that we wish to attribute to one of three
+mutually exclusive causes:
+\[
+y \in \{\,\GR,\ \WI,\ \DF\,\}.
+\]
+A diagnostic is a function that maps a scenario to a label, a confidence in
+$[0,1]$, and a human-readable reasoning chain. The discriminating insight is that
+no single signal separates all three classes. The raw observed effect separates
+\GR from the rest (a true null has a small effect), but it \emph{cannot} separate
+\WI from \DF---both can produce a small observed effect---and that separation
+requires the experiment's structural flags. This is the intended pressure that
+makes fusion necessary.
+
+\subsection{Benchmark}
+\label{sec:data}
+
+We build \nullbench, a literature-grounded generator that emits
+ground-truth-labelled scenarios---the only way to directly measure three-way cause
+accuracy given that no such public dataset exists. Each scenario emits two views.
+The \emph{raw observations}---per-arm sample size $N$, observed mean difference,
+and per-arm variances---feed the Bayesian layer. The \emph{structural flags}---
+hypothesis topology, equivalence margin, intervention strength, confound,
+evaluation awareness, measurement validity, and identifiability---feed the
+symbolic layer. Generator parameters map to the reviewed literature: effect, $N$,
+and power follow the Bayes-factor and meta-analytic
+work~\citep{rouder2009bayesian, vandeschoot2025bf}; equivalence margin and
+topology follow the confirmability topology of
+\citet{dale2024confirming}; intervention strength follows graded red-teaming with
+\harmbench~\citep{mazeika2024harmbench} as a realism anchor; and
+confound/evaluation-awareness follow the identifiability analysis
+of~\citet{santosgrueiro2026limits}. We \emph{tune on seed~0} (3{,}000 rows) and
+report all numbers on a \emph{held-out seed-7 test set} (3{,}000 rows, class
+counts $[1001, 989, 1010]$) to avoid tuning leakage.
+
+\subsection{The three diagnostics}
+
+All methods return \texttt{(label, confidence, reasoning)}.
+
+\para{Bayesian layer (raw observations only).} From the summary statistics we
+compute the standard error of the mean difference and a JZS Bayes factor
+$\mathrm{BF}_{10}$ with a $\mathrm{Cauchy}(0, r{=}0.707)$ prior on the effect size,
+integrated via the inverse-gamma scale mixture~\citep{rouder2009bayesian}. We also
+run a two-one-sided-tests (TOST) equivalence check against a fixed behavioural
+margin, and read an adequacy/power signal from $N$ and the residual noise. The
+decision rule is: a detectable effect $\rightarrow$ \WI; adequate $N$, precise
+measurement, and no effect $\rightarrow$ \GR; otherwise $\rightarrow$ \WI.
+Crucially, this layer can \emph{never} output \DF and cannot see intervention
+strength.
+
+\para{Symbolic layer (structural flags only).} A weighted logical rule system.
+A \emph{design-flaw gate}, combining confirmability~\citep{dale2024confirming} and
+identifiability~\citep{santosgrueiro2026limits}, fires \DF on any of
+\{confound, evaluation awareness, invalid measurement, non-identifiable,
+point-null topology\}. Otherwise intervention strength separates \GR (strong) from
+\WI (weak). This layer cannot see $N$ or measurement noise.
+
+\para{Hybrid (ours).} The hybrid runs the symbolic confirmability/identifiability
+gate \emph{first}, catching design flaws the Bayesian evidence cannot see. Within
+the admissible structure, it declares \GR only if \emph{all three} interpretable
+adequacy checks pass---adequate sample (Bayesian/$N$), precise measurement
+(Bayesian/noise), and substantive intervention (symbolic/strength)---and no effect
+is detectable. Any failed check routes the null to \WI while naming the check that
+failed. The confidence fuses both layers' certainties. Each diagnosis is therefore
+a short chain that names the operative evidence and the failed check, making it
+directly actionable (\eg ``increase $N$'', ``strengthen the attack'', ``remove the
+confound'').
+
+\subsection{Baselines and external judge}
+
+We compare against four baselines and one external judge.
+\nhst{} reads ``fail to reject $\Rightarrow$ robust''.
+\tostonly{} declares \GR on equivalence and \WI otherwise.
+\bayonly{} and \symonly{} are the two layers above run in isolation.
+The external judge is a frontier LLM, \llmjudge{} via OpenRouter at temperature
+$0$, shown each scenario as a natural-language report containing the \emph{same}
+information and asked to return JSON \{label, reason\}. To bound cost and latency,
+the judge runs on a stratified 150-scenario subset with responses cached; we
+report its score and, for fairness, the hybrid and single-modality scores on the
+identical subset.
+
+\subsection{Metrics and statistics}
+
+Our headline metric is three-way \macrofone, with per-class F1, accuracy, and
+row-normalised confusion matrices. We report Cohen's $\kappa$ against ground
+truth, $1{,}000$-resample bootstrap 95\% confidence intervals on \macrofone, and
+the McNemar exact test (Holm-corrected across the five baseline comparisons) on
+paired correctness of the hybrid versus each baseline. We measure calibration with
+the expected calibration error (ECE, 10 bins) and run a sensitivity sweep over the
+Bayes-factor prior scale $r$. All seeds are fixed at $42$. The full framework and
+analysis run in $8.8$\,s on CPU (no GPU needed); the LLM judge takes $396$\,s for
+150 calls at a cost of a few US cents.

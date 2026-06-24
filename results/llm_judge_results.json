@@ -1,0 +1,44 @@
+{
+  "model": "openai/gpt-4.1",
+  "n": 150,
+  "n_unparsed": 2,
+  "runtime_sec": 396.3,
+  "LLM_judge": {
+    "accuracy": 0.8866666666666667,
+    "macro_f1": 0.8879150329172741,
+    "per_class_f1": {
+      "GR": 0.8478260869565217,
+      "WI": 0.8468468468468469,
+      "DF": 0.9690721649484536
+    },
+    "kappa_vs_truth": 0.83,
+    "confusion": [
+      [
+        39,
+        11,
+        0
+      ],
+      [
+        3,
+        47,
+        0
+      ],
+      [
+        0,
+        3,
+        47
+      ]
+    ]
+  },
+  "on_subset": {
+    "Hybrid_macro_f1": 0.9933326665999934,
+    "Symbolic_macro_f1": 0.8058461870348399,
+    "Bayesian_macro_f1": 0.4846153846153846,
+    "Hybrid_acc": 0.9933333333333333
+  },
+  "agreement_kappa": {
+    "LLM_vs_Hybrid": 0.8197717108337227,
+    "LLM_vs_truth": 0.83,
+    "Hybrid_vs_truth": 0.99
+  }
+}

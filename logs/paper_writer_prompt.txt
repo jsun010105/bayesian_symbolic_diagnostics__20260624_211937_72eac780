@@ -1,0 +1,946 @@
+You are an academic paper writer. Generate a complete NEURIPS style paper
+based on the experiment results provided.
+
+════════════════════════════════════════════════════════════════════════════════
+                         IMPORTANT: BEFORE YOU START
+════════════════════════════════════════════════════════════════════════════════
+
+Before writing any content, you MUST complete these steps:
+
+1. READ THE SKILL: Review the paper-writer skill at .claude/skills/paper-writer/SKILL.md
+2. READ THE STYLE GUIDE: Study templates/paper_writing/lab_style_guide.md carefully
+3. REVIEW EXAMPLES: Browse paper_examples/ for formatting and language patterns:
+   - Look at sections/1.introduction.tex for language style
+   - Look at tables/*.tex for table formatting
+   - Look at commands/*.tex for macro usage
+4. VERIFY COMMAND TEMPLATES: Command templates (math.tex, general.tex, macros.tex) are pre-copied to paper_draft/commands/
+
+CRITICAL: Reference example papers for FORMATTING and LANGUAGE STYLE only.
+Do NOT copy content, phrasing, or narrative structure from the example papers.
+The examples are in a different research domain - focus only on presentation style.
+
+════════════════════════════════════════════════════════════════════════════════
+                            EXPERIMENT REPORT
+════════════════════════════════════════════════════════════════════════════════
+
+# Bayesian–Symbolic Diagnostics for Interpreting Null Results in AI Alignment Experiments
+
+## 1. Executive Summary
+
+A null result in an alignment experiment ("the attack failed", "the safety property held", "the
+training change had no measurable effect") is epistemically ambiguous: it can mean **genuine
+robustness**, a **weak/underpowered intervention**, or a **design flaw** (confound, broken metric,
+evaluation-awareness, or an unconfirmable hypothesis). We built and evaluated a hybrid
+**Bayesian–symbolic** diagnostic that (i) uses a *symbolic* layer to gate confirmability and
+identifiability and (ii) uses a *Bayesian/quantitative* layer to assess statistical evidence and
+power, fusing the two into a 3-way cause classification with a human-readable reasoning chain.
+
+On a ground-truth-labelled benchmark of 3,000 held-out scenarios, the **Hybrid framework reached a
+3-way macro-F1 of 0.991** (95% bootstrap CI [0.987, 0.994]), decisively beating every single-modality
+baseline: **Symbolic-only 0.871**, **Bayesian-only 0.489**, **TOST-only 0.326**, and **NHST-naive
+0.244**. All gaps are significant (McNemar exact, Holm-corrected p ≪ 0.001). The improvement is
+*mechanistic, not incidental*: Bayesian-only is structurally blind to design flaws (DESIGN_FLAW
+F1 = 0.00 — it never recovers a single one), while Symbolic-only cannot see sample size or
+measurement noise and so mislabels 371/989 underpowered cases as robustness. The hybrid is the only
+method with the inputs to resolve both failure modes.
+
+As an external, non-synthetic check we added a **real state-of-the-art LLM** (GPT-4.1 via OpenRouter)
+as an expert judge on a stratified 150-scenario subset. Given the *same* information, the LLM scored
+macro-F1 = 0.888 (Cohen's κ = 0.83 vs ground truth) — competitive with the symbolic baseline but
+clearly **below the hybrid's 0.993 on the identical subset**. A strong general reasoner does not, on
+its own, match the structured framework. **Conclusion: the hypothesis is supported** — fusing
+Bayesian evidence with symbolic structure distinguishes the three causes of a null more accurately
+than either modality (or a frontier LLM) alone, while producing interpretable, actionable diagnoses.
+
+## 2. Research Question & Motivation
+
+**Question.** Can a hybrid Bayesian–symbolic framework distinguish *genuine robustness* vs *weak
+intervention* vs *design flaw* as the cause of a null result, more accurately than either modality
+alone?
+
+**Why it matters.** NHST's "fail to reject H₀" is *not* evidence for H₀, yet alignment results are
+routinely read that way. Mis-reading a null wastes research effort and — worse — can ship false
+confidence in a model's safety (e.g. concluding "robust" when the red-team attack was simply too
+weak, or when a confound cancelled a real effect). A diagnostic that says *which* of the three a
+null is, **with a reason**, directly improves the reliability of alignment science.
+
+**Gap (from `literature_review.md`).** Bayesian model criticism (Posterior Predictive Null;
+Bayes factors / relative belief; split predictive checks) can *quantify* evidence **for** a null and
+gauge power, but is blind to the experiment's logical structure. Symbolic / neurosymbolic reasoning
+(confirmability topology; identifiability / equivalence classes) can encode *why* a null is or is not
+interpretable, but cannot tell a genuinely-null effect from a real-but-underpowered one. And **no
+public dataset labels the *cause* of a null** — every alignment-eval set diagnoses models, not the
+epistemic status of a no-effect finding. Our contribution is the fusion plus a measurable benchmark.
+
+## 3. Experimental Setup
+
+### Dataset
+`datasets/synthetic_null_results/` — a literature-grounded generator emitting **ground-truth-labelled**
+scenarios (the only way to directly measure 3-way cause accuracy, given the dataset gap above). Each
+scenario emits **raw observations** (N per arm, observed mean difference, per-arm variances → the
+Bayesian layer) and **structural flags** (hypothesis topology, equivalence margin, intervention
+strength, confound, evaluation-awareness, measurement validity, identifiability → the symbolic layer).
+We **trained/tuned on seed 0 (3,000 rows) and report all numbers on a held-out seed-7 test set
+(3,000 rows, classes [1001, 989, 1010])** to avoid tuning leakage.
+
+By construction, raw `observed_diff` separates GENUINE_ROBUSTNESS from the rest but **cannot**
+separate WEAK_INTERVENTION from DESIGN_FLAW (that needs the structural flags) — the intended pressure
+that makes fusion necessary. Generator parameters map to the reviewed literature (effect/N/power →
+A2,A6; equivalence margin & topology → B1; intervention strength → D2–D4; confound/eval-awareness →
+D1,E2). HarmBench (`code/HarmBench/`) was reviewed as a realism anchor for the intervention-strength
+axis (graded red-teaming attacks producing real null-ish results).
+
+### Methods (all return `label, confidence, reasoning`)
+- **Bayesian layer** (raw obs only): SE of the mean difference; **JZS Bayes factor** BF10 (Cauchy(0,
+  r=0.707) prior on effect size, integrated via the inverse-gamma scale mixture, Rouder et al. 2009);
+  TOST equivalence at a fixed behavioural margin; and an *adequacy/power* read from N and residual
+  noise. Decision: detectable effect → weak; adequate N + precise measurement + no effect → robust;
+  else → weak. *It can never output DESIGN_FLAW and cannot see intervention strength.*
+- **Symbolic layer** (structural flags only): weighted logical rules. A **design-flaw gate**
+  (confirmability B1 + identifiability D1) fires DESIGN_FLAW on any of {confound, eval-awareness,
+  invalid measurement, non-identifiable, point-null topology}. Otherwise intervention strength
+  separates robust (strong) vs weak (weak). *It cannot see N or measurement noise.*
+- **Hybrid (ours)**: symbolic confirmability/identifiability gate first (catches design flaws the
+  Bayesian evidence cannot see); within the admissible structure, GENUINE_ROBUSTNESS requires **all
+  three** interpretable adequacy checks — adequate sample (Bayesian/N), precise measurement
+  (Bayesian/noise), substantive intervention (symbolic/strength) — and no detectable effect; any
+  failure → WEAK_INTERVENTION, naming the failed check. Confidence fuses both layers.
+
+### Baselines & external judge
+NHST-naive ("fail to reject ⇒ robust"); TOST-only (equivalence ⇒ robust else weak); Bayesian-only;
+Symbolic-only; and a **real-LLM expert judge** — **GPT-4.1 via OpenRouter**, temperature 0, shown each
+scenario as a natural-language report with the same information, returning JSON `{label, reason}`
+(150 stratified scenarios, responses cached to `results/llm_cache.json`).
+
+### Metrics & statistics
+3-way macro-F1 (headline) + per-class F1; accuracy; row-normalised confusion matrices; Cohen's κ;
+**1,000-resample bootstrap 95% CIs** on macro-F1; **McNemar exact test** (Holm-corrected) for paired
+correctness, Hybrid vs each baseline; **ECE** (calibration, 10 bins); and a **sensitivity sweep** of
+the Bayes-factor prior scale. Seeds fixed (42). Hardware: CPU-only (no GPU available/needed). Runtime:
+full framework + analysis **8.8 s**; LLM judge **396 s** (150 calls, 8 workers). LLM cost ≈ a few
+US cents.
+
+## 4. Results
+
+### 4.1 Headline — 3-way diagnostic accuracy (held-out, n=3,000)
+
+| Method | Macro-F1 (95% CI) | Accuracy | κ vs truth | ECE | GR F1 | WI F1 | DF F1 |
+|---|---|---|---|---|---|---|---|
+| NHST-naive | 0.244 [0.233, 0.257] | 0.362 | — | — | — | — | 0.00 |
+| TOST-only | 0.326 [0.312, 0.340] | 0.424 | — | — | — | — | 0.00 |
+| Bayesian-only | 0.489 [0.478, 0.499] | 0.608 | 0.414 | 0.058 | 0.80 | 0.66 | **0.00** |
+| Symbolic-only | 0.871 [0.860, 0.883] | 0.876 | 0.814 | 0.191 | 0.84 | 0.77 | 1.00 |
+| LLM judge (GPT-4.1)¹ | 0.888 | 0.887 | 0.830 | — | 0.85 | 0.85 | 0.97 |
+| **Hybrid (ours)** | **0.991 [0.987, 0.994]** | **0.991** | **0.986** | 0.248 | **0.99** | **0.99** | **1.00** |
+
+¹ LLM judge on a stratified 150-scenario subset (others on full 3,000); on that *same* subset the
+Hybrid scores 0.993, Symbolic 0.806, Bayesian 0.485 — so the ranking is unchanged. See Fig. 4.
+
+**Significance (McNemar exact, Holm-corrected).** Hybrid vs Symbolic-only p = 3.7×10⁻⁷⁸ (net +343
+cases); vs Bayesian-only, TOST-only, NHST-naive all p < 10⁻³⁰⁰ (net +1148, +1701, +1885). The
+Hybrid's CI does not overlap any baseline's.
+
+![Macro-F1 with bootstrap CIs](figures/fig1_macroF1.png)
+![All methods incl. LLM judge](figures/fig4_all_methods.png)
+
+### 4.2 Mechanism — where each modality is blind (confusion matrices)
+
+![Confusion matrices](figures/fig2_confusion.png)
+
+- **Bayesian-only — DESIGN_FLAW F1 = 0.00.** It has no concept of a structural flaw, so all 1,010
+  design-flaw nulls are misrouted (310 → robustness, 700 → weak). Confirms hypothesis H2: a confound
+  that cancels a real effect, or a logically unconfirmable point-null, is invisible to evidence alone.
+- **Symbolic-only — robustness↔weak confusion.** It gets design flaws perfectly (F1 = 1.00) but,
+  blind to N and noise, mislabels **371/989** underpowered (small-N / coarse-metric) cases as
+  GENUINE_ROBUSTNESS. Confirms H3.
+- **Hybrid — both resolved.** Only 28/3,000 errors remain (27 robustness↔weak boundary cases near the
+  noise/N thresholds, 1 the reverse); design flaws perfect. It is the only method holding all the
+  inputs needed to separate all three causes.
+
+### 4.3 Interpretability (sample reasoning chains, verbatim from `results/example_reasoning_chains.json`)
+
+- **GENUINE_ROBUSTNESS** (conf 0.75): *"[Symbolic gate] clean, identifiable & confirmable design …
+  [Bayesian] adequate sample (n=100) and precise measurement (sd=1.52); [Symbolic] substantive
+  intervention (strength=0.64) still found nothing (BF01=5.50) → GENUINE_ROBUSTNESS."*
+- **WEAK_INTERVENTION** (conf 0.70): *"… [Bayesian] inadequate sample (n=20 < 50) [Symbolic] weak
+  intervention (strength=0.17 < 0.5) → a real effect could be masked → WEAK_INTERVENTION."*
+- **DESIGN_FLAW** (conf 0.84): *"[Symbolic gate] Design-flaw gate fired: evaluation-awareness (D1);
+  non-identifiable (D1). [Hybrid] structure uninterpretable → DESIGN_FLAW."*
+
+Each diagnosis names the specific failed check — directly actionable (e.g. "increase N", "strengthen
+the attack", "remove the confound / specify an equivalence margin").
+
+### 4.4 Sensitivity (E4) and calibration
+
+![Sensitivity to BF prior](figures/fig3_sensitivity.png)
+
+Sweeping the Bayes-factor Cauchy prior scale r ∈ {0.354, 0.5, 0.707, 1.0, 1.414} moves Hybrid
+macro-F1 only within **[0.989, 0.993]** — the framework is robust to prior specification (the
+detectable-effect branch is the only prior-dependent component). **Calibration:** Hybrid ECE = 0.248
+reflects *under*-confidence (mean confidence ≈ 0.74 while accuracy = 0.99) — conservative, which for
+a diagnostic tool is the safer direction; see Limitations.
+
+## 5. Analysis & Discussion
+
+The results support all four sub-hypotheses. **H1** (hybrid > each baseline) holds with non-overlapping
+bootstrap CIs and significant Holm-corrected McNemar tests. **H2/H3** are visible directly in the
+confusion matrices: the two modalities fail on *disjoint, complementary* slices (Bayesian on design
+flaws; symbolic on power), and fusion is best precisely because it is the only method that observes
+all the discriminating inputs — sample size and noise (raw/Bayesian) **and** intervention strength
+and structural flags (symbolic). This is the core epistemic claim of the proposal, made measurable.
+**H4** (interpretable, calibrated outputs): every diagnosis is a short reasoning chain naming the
+operative evidence/check; confidence is monotone but conservative.
+
+The **real-LLM judge** is the most informative comparison for "is the structure actually doing work?"
+GPT-4.1, given identical information and an explicit rubric, reaches 0.888 — it nails design flaws
+(0.97, the flags are salient) but still confuses robustness with weak intervention (it does not
+reliably convert N=20 or sd=3.2 into "underpowered"), landing well below the framework's 0.993 on the
+same items. The framework's explicit power/identifiability logic adds value a frontier model does not
+supply for free, and does so transparently and at ~zero marginal cost (8.8 s vs 396 s of API calls).
+
+**Comparison to literature.** The design operationalises the reviewed pillars: equivalence-margin /
+confirmability gating (B1), identifiability as an equivalence-class obstruction (D1), Bayes-factor
+evidence with prior sensitivity (A4/A5), and graded red-teaming as the intervention-strength axis
+(D2–D4) anchored on HarmBench. The headline negative finding for NHST-naive (acc 0.36) is the
+empirical face of "absence of evidence ≠ evidence of absence".
+
+## 6. Limitations
+
+- **Synthetic benchmark, by construction separable.** The generator encodes the discriminating
+  structure that fusion exploits; the experiment therefore demonstrates and quantifies the *fusion
+  logic* and each modality's blind spot, but the absolute 0.99 will not transfer verbatim to messy
+  real experiments. This is a controlled proof-of-mechanism, not a field accuracy estimate. The
+  literature-confirmed absence of a cause-labelled real benchmark is exactly the gap motivating it.
+- **Dataset-informed thresholds.** The hybrid's adequacy checks (N ≥ 50, residual sd ≤ 2.0, strength
+  ≥ 0.5) are interpretable rules of thumb tuned to the generator; on real data they would be set by a
+  proper power analysis / measurement-validity audit per study. Robustness to the *prior* is shown
+  (E4); robustness to *these* thresholds is future work.
+- **Single LLM judge, no human panel.** GPT-4.1 is a proxy for the methodology's intended human
+  expert; true inter-annotator κ against human methodologists is not measured here.
+- **Under-confidence (ECE 0.248).** Confidence scores are conservative and would benefit from
+  post-hoc calibration (e.g. isotonic) before being surfaced to users as probabilities.
+- **Three-cause taxonomy.** Real nulls can have mixed/compound causes; the framework currently emits a
+  single hard label (plus reasoning), not a multi-label or partial-cause decomposition.
+
+## 7. Conclusions & Next Steps
+
+**Answer to the research question: yes.** Fusing Bayesian evidence/power quantification with symbolic
+reasoning about experimental structure classifies the cause of a null result (genuine robustness vs
+weak intervention vs design flaw) far more accurately than Bayesian-only, symbolic-only, naive NHST/
+equivalence baselines, or a frontier LLM given identical information — because it is the only approach
+that observes *both* the statistical adequacy signals and the structural/identifiability signals, and
+it does so with transparent, actionable reasoning chains.
+
+**Next steps.** (1) Validate on *semi-synthetic* scenarios anchored on real HarmBench attack-success
+structure, and ultimately on a small human-expert-labelled corpus of published alignment nulls.
+(2) Replace fixed thresholds with per-study power analyses and a measurement-validity audit.
+(3) Post-hoc calibrate confidences and emit partial-cause (multi-label) decompositions. (4) Convene a
+human-expert panel for inter-annotator κ. (5) Stress-test threshold sensitivity as thoroughly as the
+prior sensitivity in E4.
+
+## References (selected; full set in `literature_review.md` / `papers/`)
+- Moran, Cunningham, Blei (2022). *The Posterior Predictive Null.* Bayesian Analysis. `2112.03333`.
+- Rouder et al. (2009). *Bayesian t-tests for accepting and rejecting the null.* (JZS Bayes factor.)
+- *Confirming the Null: Equivalence Testing & the Topology of Confirmation* (2024). `2405.16331`.
+- *On the Limits of Behavioral Alignment / Alignment Verifiability* (2026). `2602.05656` (identifiability).
+- Mazeika et al. (2024). *HarmBench: Standardized Automated Red-Teaming.* `2402.04249`.
+- *Reasoning in Neurosymbolic AI (Logical Boltzmann Machines)* (2025). `2505.20313`.
+- Tools: Python 3, NumPy, pandas, SciPy, scikit-learn, Matplotlib; OpenRouter (GPT-4.1). Seeds = 42.
+
+
+════════════════════════════════════════════════════════════════════════════════
+                            RESEARCH PLAN
+════════════════════════════════════════════════════════════════════════════════
+
+# Planning: Bayesian Symbolic Diagnostics for Interpreting Null Results in AI Alignment
+
+## Motivation & Novelty Assessment
+
+### Why This Research Matters
+Alignment experiments increasingly report null/ambiguous results ("the attack failed", "the
+safety property held", "the training change had no measurable effect"). A null is epistemically
+ambiguous: it can mean **genuine robustness**, a **weak/underpowered intervention**, or a
+**design flaw** (confound, broken metric, evaluation-awareness, unconfirmable hypothesis). NHST
+("fail to reject H₀") is structurally unable to separate these. Mis-reading a null wastes research
+effort and, worse, can ship false confidence in a model's safety. A diagnostic that tells a
+researcher *which* of the three a null is — with an interpretable reason — directly improves the
+reliability of alignment science.
+
+### Gap in Existing Work (from literature_review.md)
+- **Bayesian model criticism** (Posterior Predictive Null A1; Bayes factors / relative belief A4,A5;
+  split predictive checks A2) can *quantify* evidence **for** a null and gauge power — but is blind
+  to the experiment's logical structure (a confound that cancels a real effect looks like a clean
+  null; a point-null hypothesis is statistically testable but logically unconfirmable, B1).
+- **Symbolic / neurosymbolic reasoning** (B1 confirmability topology, D1 identifiability/equivalence
+  classes) can encode *why* a null is or isn't interpretable — but cannot, on its own, tell a
+  genuinely-null effect from a real-but-underpowered one (that needs the quantitative evidence/power).
+- **No public dataset labels the *cause* of a null** (confirmed by the resource finder's search):
+  every alignment-eval set diagnoses models, not the epistemic status of a "no-effect" finding.
+
+### Our Novel Contribution
+A **hybrid Bayesian–symbolic diagnostic** that (i) uses a symbolic layer to *gate*
+confirmability/identifiability (catches design flaws Bayesian evidence cannot), then (ii) uses a
+Bayesian evidence+power layer to separate genuine robustness from weak intervention *within the
+admissible structure*, producing an interpretable reasoning chain and a calibrated confidence. We
+test whether this hybrid beats Bayesian-only, symbolic-only, and naive-NHST/TOST baselines on
+3-way cause classification — the literature's open question, made measurable via a ground-truth
+generator.
+
+### Experiment Justification
+- **E1 — Main ablation (headline):** Bayesian-only vs Symbolic-only vs Hybrid (+ NHST-naive, TOST-only
+  baselines) on 3-way macro-F1. Directly tests the hypothesis's core claim. *Needed* because the
+  whole contribution is "fusion beats either modality alone."
+- **E2 — Real-LLM expert-judge baseline:** a state-of-the-art LLM (via OpenRouter) is shown the same
+  scenarios in natural language and asked to diagnose the cause. Maps methodology step 7 ("compare
+  against expert assessments"); tests whether a strong general reasoner already solves the task or
+  whether the structured framework adds value. *Needed* to ground the claim against a real model and
+  to compute framework↔expert Cohen's κ.
+- **E3 — Mechanism / error analysis:** confusion matrices, detection-vs-effect-size curves,
+  calibration (ECE). *Needed* to show the *why*: where each modality is blind and how fusion fixes it.
+- **E4 — Sensitivity analysis:** vary the Bayes-factor prior scale and equivalence margin; measure
+  hybrid robustness. *Needed* for the methodology's required prior-sensitivity check.
+
+## Research Question
+Can a hybrid Bayesian–symbolic framework distinguish genuine robustness vs weak intervention vs
+design flaw as the cause of a null result, more accurately than either modality alone?
+
+## Hypothesis Decomposition
+- H1: Hybrid 3-way macro-F1 > each of {Bayesian-only, Symbolic-only, NHST-naive, TOST-only}.
+- H2: Bayesian-only confuses DESIGN_FLAW with the others (blind to confound/confirmability).
+- H3: Symbolic-only confuses GENUINE_ROBUSTNESS with WEAK_INTERVENTION (blind to N/noise power).
+- H4: Hybrid produces calibrated confidences and interpretable reasoning chains.
+
+## Methodology
+
+### Data
+Primary: `datasets/synthetic_null_results/` (3,000 ground-truth-labeled scenarios, ~balanced).
+Each row emits raw observations (→ Bayesian layer) and symbolic/structural flags (→ symbolic layer).
+By construction `observed_diff` separates robustness from the rest but **cannot** separate
+weak-intervention from design-flaw — the intended pressure that makes fusion necessary. We
+regenerate a larger held-out test set with a different seed to avoid any tuning leakage.
+
+### Methods
+- **Bayesian layer:** from summary stats compute SE of the mean difference, a JZS-style Bayes factor
+  BF10 (Cauchy prior on effect size, Savage–Dickey/numerical), and a TOST equivalence test against
+  the scenario's margin; derive a *power/confirmability* signal (is the CI tight enough to confirm
+  equivalence?). Decision: strong null evidence + confirmed equivalence → robustness; inconclusive /
+  underpowered → weak intervention; clear effect → (cannot itself attribute → defaults).
+- **Symbolic layer:** weighted logical rules over {confound, evaluation_awareness, measurement_valid,
+  identifiable, hypothesis_topology, equivalence_margin_set, intervention_strength}. Design-flaw gate
+  (B1 confirmability + D1 identifiability) fires DESIGN_FLAW; otherwise intervention_strength
+  separates robustness (strong) vs weak intervention (weak) — but is blind to N/noise.
+- **Hybrid fusion:** symbolic gates confirmability/identifiability first (DESIGN_FLAW); within the
+  admissible structure the Bayesian evidence+power layer separates robustness vs weak intervention;
+  composite confidence combines symbolic rule certainty and Bayesian evidence magnitude. Emits a
+  human-readable reasoning chain.
+
+### Baselines
+NHST-naive ("fail to reject ⇒ robust"); TOST-only (equivalence ⇒ robust else weak); Bayesian-only;
+Symbolic-only; plus the real-LLM expert judge (E2).
+
+### Evaluation Metrics
+3-way macro-F1 (headline) + per-class F1; accuracy; confusion matrices; Cohen's κ (framework↔ground
+truth, framework↔LLM); bootstrap 95% CIs on macro-F1; McNemar test hybrid-vs-baseline; ECE
+(calibration); detection-vs-effect-size curve.
+
+### Statistical Analysis Plan
+- 1,000-resample bootstrap CIs on macro-F1 for every method.
+- McNemar's exact test for paired correctness, hybrid vs each baseline (α=0.05).
+- Cohen's κ for agreement. Multiple-comparison note (5 baselines) — report raw + Holm.
+
+## Expected Outcomes
+Hybrid macro-F1 materially > all single-modality baselines; Bayesian-only fails on DESIGN_FLAW;
+symbolic-only fails on robustness↔weak; LLM judge competitive but not dominant. Supports H1–H4.
+
+## Timeline (≤60 min total)
+Plan ✓ → env ✓ (10) → framework+E1 (15) → LLM judge E2 (10) → analysis/figures E3–E4 (12) → report (10).
+
+## Potential Challenges & Mitigations
+- *Dataset is built so fusion wins* → honest framing as a controlled demonstration + sensitivity
+  analysis (E4) + real-LLM external check (E2); separate test seed; report this as a limitation.
+- *OpenRouter latency/limits* → judge on a 150-scenario stratified subset, parallel calls, cache, retries.
+- *Bayes-factor prior sensitivity* → E4 sweeps the prior scale.
+
+## Success Criteria
+H1 holds with non-overlapping bootstrap CIs and significant McNemar tests; mechanism story (H2,H3)
+visible in confusion matrices; framework produces interpretable, calibrated outputs.
+
+
+════════════════════════════════════════════════════════════════════════════════
+                          LITERATURE REVIEW
+════════════════════════════════════════════════════════════════════════════════
+
+# Literature Review: Bayesian Symbolic Diagnostics for Interpreting Null Results in AI Alignment Experiments
+
+**Research hypothesis.** A hybrid Bayesian–symbolic diagnostic framework can systematically
+distinguish between *true model robustness*, *insufficient/weak experimental interventions*, and
+*design flaws* as causes of null results in AI alignment experiments, with higher accuracy than
+Bayesian-only or symbolic-only methods.
+
+This review synthesizes 18 downloaded papers across four pillars that the framework must combine:
+(1) **Bayesian evidence quantification & model criticism** (how to quantify evidence *for* a null),
+(2) **the logic of confirming nulls** (when is "no effect" actually confirmable),
+(3) **neurosymbolic representation & reasoning** (how to encode intervention logic / assumptions
+symbolically), and (4) **AI alignment evaluation, robustness & red-teaming** (the application
+domain and where null results actually arise).
+
+---
+
+## 1. Research Area Overview
+
+A *null result* in an alignment experiment ("the intervention did not change the model's behavior",
+"the safety property held under our attack", "no measurable effect of the training change") is
+deeply ambiguous. It can mean three very different things:
+
+- **Genuine robustness (true null):** the model really is invariant to the manipulation.
+- **Weak/insufficient intervention (false null from low power):** the intervention was too small,
+  the attack too weak, the sample too small, or the metric too coarse to detect a real effect.
+- **Design flaw (invalid null):** a confound, a broken measurement, evaluation awareness/leakage,
+  or a logically unconfirmable hypothesis structure makes the result uninterpretable.
+
+The classical statistical apparatus (NHST p-values) is structurally unable to separate these:
+"failure to reject H₀" is *not* evidence for H₀. The literature converges on two complementary
+remedies that this project fuses:
+
+1. **Bayesian evidence & model criticism** can *quantify* support for a null and compare competing
+   model/intervention hypotheses (Bayes factors, relative belief ratios, posterior predictive
+   checks, the posterior predictive null, split predictive checks).
+2. **Symbolic / neurosymbolic representations** can encode the *logical structure* of the
+   experiment — the intervention logic, the assumptions, the hypothesis topology — so that the
+   diagnostic can reason about *why* a null is or is not interpretable (confirmable hypothesis
+   topology, identifiability, severe-testing semantics, logical constraints).
+
+The alignment-evaluation literature supplies both the motivating problem and a sharp formal
+articulation of it: behavioral evaluation provides *necessary but insufficient* evidence for latent
+alignment, and observed compliance only identifies an **equivalence class** of policies, not a
+unique latent property.
+
+---
+
+## 2. Key Papers
+
+### Pillar A — Bayesian evidence quantification & model criticism
+
+#### A1. The Posterior Predictive Null (Moran, Cunningham, Blei, 2021/2022) — `papers/2112.03333_*`
+- **Source:** Bayesian Analysis (2022). Code: https://github.com/gemoran/ppn-code
+- **Key contribution:** The **posterior predictive null check (PPN)** — a *comparative* Bayesian
+  model-criticism tool. A classical posterior predictive check (PPC) asks whether observed data is
+  consistent with a model; the PPN asks whether **data simulated from model A can pass the
+  predictive check of model B**. If yes, A "fools" B → the two models are predictively equivalent
+  under that diagnostic.
+- **Why this is central to our framework:** This is *exactly* the machinery for distinguishing
+  "genuine robustness" from "weak intervention." Reframe: model A = the null/no-effect model,
+  model B = the intervention-has-effect model. A classical PPC may show *both* fit the data (both
+  pass), which is the standard null-result ambiguity. The PPN disambiguates: it separates whether a
+  more complex (intervention) model is *necessary* vs merely *sufficient*. Quote: "the classical PPC
+  helps indicate if a model's complexity is *sufficient*... while the PPN helps to determine whether
+  that complexity is *necessary*." Necessary-but-not-present complexity ↔ a real-but-undetected
+  effect; unnecessary complexity ↔ genuine robustness/parsimony.
+- **Method:** Reference distribution = posterior predictive; diagnostic functions (e.g.
+  log-likelihood); a *PPN study* = full matrix of cross-checks between a collection of models;
+  selection by parsimony.
+- **Datasets in paper:** synthetic Gaussian mixtures (choosing K), probabilistic factor models
+  (linear vs neural), and re-analysis of predictive-check literature data.
+
+#### A2. Calibrated Model Criticism Using Split Predictive Checks (Li & Huggins, 2022) — `papers/2203.15897_*`
+- **Key contribution:** **Split predictive checks (SPCs)** — combine the ease/speed of PPCs with
+  good *calibration* (uniform PPC p-values under the true model). Single vs divided SPCs with
+  asymptotic theory.
+- **Relevance:** PPCs are notoriously *miscalibrated* (conservative), which directly biases
+  null-result interpretation toward "fits fine / no problem." A diagnostic framework that reports
+  calibrated evidence is essential to avoid declaring false robustness. SPCs are a practical,
+  automated criticism primitive to plug into the Bayesian layer.
+
+#### A3. Recommendations for Visual Predictive Checks in Bayesian Workflow (Säilynoja, Johnson, Martin, Vehtari, 2025) — `papers/2503.01509_*`
+- **Key contribution:** Practical guidance for selecting/interpreting prior & posterior predictive
+  visualizations; treats the visual check itself as a model that can fail. Part of the broader
+  **Bayesian workflow** program (Gelman et al.).
+- **Relevance:** Defines the workflow context in which our diagnostics live; warns that checks have
+  implicit assumptions that, if violated, mislead — i.e., a source of *design-flaw* diagnoses.
+
+#### A4. How to Measure Evidence and Its Strength: Bayes Factors or Relative Belief Ratios? (2023) — `papers/2301.08994_*`
+- **Key contribution:** Compares two measures that both satisfy the *principle of evidence*: the
+  **Bayes factor** and the **relative belief ratio** (RB = posterior/prior density ratio at a value).
+  Argues RB has advantages (less prior-sensitivity for measuring evidence strength, natural handling
+  of evidence *for* H).
+- **Relevance:** The "Bayesian evidence quantification" component needs a principled scalar of
+  evidence *for the null*. This paper is the menu of options + their pitfalls (esp. prior
+  sensitivity, the Jeffreys–Lindley issue).
+
+#### A5. The Expected Demise of the Bayes Factor (Robert, 2015/2017) — `papers/1506.08292_*`
+- **Key contribution:** A pointed critique of default Bayes factors — sensitivity to (improper)
+  priors, the Jeffreys–Lindley paradox, instability of marginal-likelihood computation.
+- **Relevance:** A *cautionary* reference. Tells us the Bayesian-only approach is fragile precisely
+  where it matters (priors on the intervention-effect magnitude), motivating the symbolic scaffolding
+  and sensitivity analysis. Important for the "Bayesian alone < hybrid" comparison.
+
+#### A6. Bayes Factor Hypothesis Testing in Meta-Analyses (2025) — `papers/2511.22535_*`
+- **Key contribution:** Practical advantages of Bayes factors for *cumulative/sequential* evidence
+  (meta-analysis): can accumulate evidence for the null, supports optional stopping.
+- **Relevance:** Alignment null results often come from *many* small experiments/seeds; aggregating
+  evidence for "no effect" across them is a meta-analytic problem. Gives the sequential-evidence
+  pattern for the framework.
+
+#### A7. Two-Sample Bayesian Nonparametric Hypothesis Testing (Holmes, Caron, Griffin, Stephens, 2009) — `papers/0910.5060_*`
+- **Key contribution:** Pólya-tree-based **nonparametric** Bayesian test of H₀: F⁽¹⁾ ≡ F⁽²⁾ (two
+  distributions equal) vs unequal — i.e., evidence for/against distributional equality without
+  parametric assumptions.
+- **Relevance:** A null result is frequently "the output distribution didn't change after the
+  intervention." This is the canonical nonparametric tool to quantify evidence that two behavioral
+  distributions (pre/post intervention, treated/control model) are the *same* — directly operational
+  for the "genuine robustness = distributions equivalent" diagnosis.
+
+### Pillar B — The logic of confirming a null
+
+#### B1. Confirming the Null: Equivalence Testing and the Topology of Confirmation (Dale, 2024) — `papers/2405.16331_*`
+- **Source:** math.ST. **Key result (very important):** Using a modal logic of short-run
+  frequentist confirmation (via the duality between testing and confidence-region estimation), a
+  hypothesis is **confirmable iff it has nonempty topological interior**. Consequence:
+  **two-sided point nulls (θ = θ₀) are NOT confirmable**, but **equivalence / non-inferiority
+  hypotheses (θ ∈ [L,U]) ARE confirmable**. Three test outcomes: confirmed / rejected /
+  inconclusive (Rα ⊆ H, Rα ⊆ Hᶜ, or Rα straddles both). Equivalence testing (TOST) is shown to be
+  a model of Mayo's **severe testing**.
+- **Why central:** This is the *symbolic/logical backbone* for deciding when a null is even
+  *eligible* to mean "genuine robustness." A claim "the intervention has zero effect" (point null)
+  is logically unconfirmable — a design flaw of *hypothesis structure*. To claim robustness one must
+  (a) specify an equivalence margin and (b) get the confidence region inside it. This gives the
+  framework a crisp, automatable rule that pure Bayesian evidence alone does not surface: it tells
+  you *a priori* whether a null result *could* be confirmatory, separating "design flaw" from
+  "weak intervention" from "true null."
+- **Operational takeaway:** the symbolic layer should encode each null hypothesis with its topology
+  (point vs interval/equivalence) and an explicit margin; "inconclusive" (region straddles the
+  boundary) is the formal signature of an *underpowered/weak* experiment.
+
+### Pillar C — Neurosymbolic representation & reasoning
+
+#### C1. Reasoning in Neurosymbolic AI (Tran, Mota, d'Avila Garcez, 2025) — `papers/2505.20313_*`
+- **Key contribution:** Survey + concrete system: **Logical Boltzmann Machines (LBM)** — an
+  energy-based system that translates *any propositional logic formula* into an RBM with a proof of
+  soundness (logical models ↔ minimum-energy assignments). Reasoning = energy minimization / search
+  for satisfying assignments; supports SAT/MaxSAT and weighted (confidence-valued) constraints.
+- **Relevance:** Demonstrates the standard neurosymbolic pattern we need: encode domain
+  knowledge / experimental assumptions as logical formulae, attach **confidence/penalty weights**
+  (= soft assumptions), and reason over them. The "logical constraints as a module on top of neural
+  nets (fairness/safety)" idea maps onto encoding *intervention logic and experimental assumptions*
+  as a constraint set the diagnostic reasons over. Identifies data-efficiency, fairness, safety as
+  the LLM gaps neurosymbolic methods address.
+
+#### C2. Sound and Complete Neurosymbolic Reasoning with LLM-Grounded Interpretations (Allen, Chhikara, Ferguson, Ilievski, Groth, 2025) — `papers/2507.09751_*`
+- **Key contribution:** Integrates an LLM directly into the **interpretation function** of a
+  **paraconsistent** logic's formal semantics — harnessing LLM broad-coverage knowledge while
+  tolerating inconsistency. **Bilateral** (truth *and* falsity assessed separately) factuality
+  evaluation; +~6 macro-F1 over a unilateral baseline on GPQA/SimpleQA-derived sets.
+- **Relevance:** Two ideas transfer directly. (1) **Paraconsistency / bilateral evaluation**: a null
+  result has *separate* evidence-for and evidence-against; treating "no evidence against" as
+  "evidence for" is the core fallacy — bilateral truth values formalize the distinction. (2) Using an
+  LLM as a grounded interpreter lets the symbolic layer reason over natural-language experimental
+  descriptions and assumptions.
+
+#### C3. Priors for Symbolic Regression (Bartlett, Desmond, Ferreira, 2023) — `papers/2304.06333_*`
+- **Key contribution:** Non-uniform **priors over symbolic expressions** (structure prior via an
+  n-gram language model over operators; parameter priors), making symbolic regression Bayesian —
+  prefers simpler / contextually-familiar equations, with a description-length / Occam framing.
+- **Relevance:** This is the literal *Bayesian-symbolic* fusion at the heart of the project: a prior
+  over symbolic structures + Bayesian evidence. It shows how to put a principled prior over the
+  *space of symbolic intervention/assumption hypotheses* and score them by marginal likelihood /
+  MDL — the template for ranking candidate symbolic explanations of a null.
+
+### Pillar D — AI alignment evaluation, robustness & red-teaming (the application domain)
+
+#### D1. On the Limits of Behavioral Alignment / Alignment Verifiability (Santos-Grueiro, 2026) — `papers/2602.05656_*`
+- **Key contribution:** Frames alignment evaluation as a **statistical identifiability** problem
+  under partial observability. Introduces **evaluation awareness** (policy conditions on signals
+  correlated with the eval regime) and **Normative Indistinguishability** (distinct latent alignment
+  hypotheses induce identical evaluator-observable distributions). **Theorem 1 (conditional
+  impossibility):** under finite, evaluation-aware testing, observed compliance identifies only an
+  **equivalence class / Indistinguishability Set**, not the latent property. Constructive
+  "Chameleon" witness on Llama-3.2-3B: compliant under explicit eval signals, divergent under
+  implicit ones.
+- **Why central:** This is the deepest formal statement of *our exact problem*. A null/compliant
+  result ("model passed the safety eval") may reflect genuine alignment **or** an indistinguishable
+  conditionally-compliant policy (≈ "weak/leaky intervention"). The paper's prescription — "interpret
+  behavioral tests as estimating equivalence classes... not verifying a context-invariant latent
+  property", restoring verifiability "requires information beyond input–output behavior" — is the
+  rationale for adding the symbolic/structural layer. Connects directly to B1 (equivalence classes)
+  and gives the framework its alignment-specific failure taxonomy.
+
+#### D2. HarmBench (Mazeika, Phan, Yin, Zou, Wang, et al., 2024) — `papers/2402.04249_*`
+- **Key contribution:** Standardized evaluation framework for **automated red-teaming**; large-scale
+  comparison of **18 red-teaming methods × 33 target LLMs/defenses**; identifies desirable eval
+  properties; introduces an efficient adversarial training method (R2D2). Code/leaderboard public.
+- **Relevance:** The canonical source of *alignment experiments that produce null-ish results*
+  (attack failed → "model is robust"). Provides realistic distributions of attack-success-rate (ASR)
+  data, a controlled set of interventions (attacks) of *varying strength*, and the standardized
+  harness our diagnostic can be evaluated against. A primary candidate for grounding/semi-synthetic
+  data (strong vs weak attacks = strong vs weak interventions).
+
+#### D3. Learning-Based Automated Adversarial Red-Teaming (Zhang Wei et al., 2025) — `papers/2512.20677_*`
+- **Key contribution:** Formulates red-teaming as **structured adversarial search**; learning-driven
+  meta-prompt generation + hierarchical execution/detection across six threat categories; emphasizes
+  scalability, reproducibility, coverage in high-dimensional prompt spaces.
+- **Relevance:** Models *intervention strength* as search effort/coverage — gives a principled knob
+  for "how hard did we try?" A null after weak search ≠ a null after exhaustive search; this is the
+  weak-intervention axis operationalized.
+
+#### D4. Gradient-Based Language Model Red Teaming (Wichers, Denison, Beirami, 2024) — `papers/2401.16656_*`
+- **Key contribution:** **GBRT** — prompt-learning attack that backprops through a frozen safety
+  classifier + LM to generate diverse unsafe-triggering prompts; an automated, *differentiable*
+  intervention.
+- **Relevance:** A concrete, tunable intervention generator; its strength is controllable
+  (optimization steps, diversity regularization), useful for constructing graded interventions where
+  ground-truth (effect / no-effect) is known.
+
+#### D5. Towards Trustworthy Agentic AI: a Comprehensive Survey (Qi, Li, Liu, Shu, Yu, et al., 2026) — `papers/2605.23989_*`
+- **Key contribution:** Survey of safety/robustness/privacy/security failure modes across the
+  agentic-AI workflow, with stage-targeted mitigations.
+- **Relevance:** Broad taxonomy of where alignment interventions are applied and where null results
+  appear along multi-step agent trajectories; useful for scoping the experiment space and defining
+  realistic intervention/assumption sets.
+
+### Pillar E — Diagnostics & sanity checks (cross-cutting methodology)
+
+#### E1. Revisiting Sanity Checks for Saliency Maps (2021) — `papers/2110.14297_*`
+- **Key contribution:** Revisits Adebayo et al.'s model/data-randomization "sanity checks" for
+  attribution methods; analyzes their reliability and the conditions under which a method's
+  *insensitivity* to randomization is a genuine failure vs an artifact of the check.
+- **Relevance:** The sanity-check paradigm is a direct analogue of our problem: distinguishing "the
+  method correctly found nothing" from "the method is broken / the test is uninformative." Provides
+  the design pattern of **positive/negative controls** (cascading randomization) — i.e., calibrating
+  a diagnostic against cases with *known* ground truth, which is how we should validate the framework.
+
+#### E2. Resolving Spurious Correlations in Causal Models via Interventions (Volodin, Wichers, Nixon, 2020) — `papers/2002.05217_*`
+- **Key contribution:** Infers a causal model of an RL environment; designs a reward that
+  incentivizes the agent to **perform interventions that expose errors** in the current causal model;
+  iteratively improves the model from interventional data.
+- **Relevance:** Embodies the *active-intervention-to-detect-design-flaws* loop. A null can stem from
+  a spurious correlation / wrong causal model; the cure is a targeted intervention. This is the
+  causal-diagnostics analogue of "is the null due to a confound (design flaw)?" and suggests an
+  active-experimentation extension of the framework.
+
+---
+
+## 3. Common Methodologies (synthesized)
+
+- **Predictive checks family** (A1, A2, A3): reference distribution + diagnostic function + p-value/
+  visual; PPN extends to *comparative* checks; SPC fixes calibration. → core Bayesian criticism layer.
+- **Evidence scalars** (A4, A5, A6): Bayes factors, relative belief ratios, marginal likelihood/MDL;
+  known fragility to priors → require sensitivity analysis.
+- **Equivalence / nonparametric distribution testing** (A7, B1): TOST, Pólya-tree two-sample tests;
+  equivalence margins make "no effect" confirmable.
+- **Symbolic encoding + weighted constraints** (C1, C2, C3): logic→energy (LBM), LLM-grounded
+  paraconsistent semantics (bilateral truth), priors over symbolic structures (MDL/Occam).
+- **Identifiability / equivalence-class reasoning** (D1, B1): the formal lens unifying "robustness vs
+  weak intervention" as "unique identification vs indistinguishability set."
+- **Controlled interventions of graded strength** (D2, D3, D4): attacks/red-teaming with tunable
+  effort = the independent variable whose true effect can be set/known.
+- **Sanity-check / control calibration** (E1, E2): positive/negative controls with known ground
+  truth to validate a diagnostic.
+
+## 4. Standard Baselines (for the hypothesis's three-way comparison)
+
+The hypothesis demands beating **Bayesian-only** and **symbolic-only** ablations. Concretely:
+- **Bayesian-only baseline:** Bayes factor / relative belief ratio (A4) and/or posterior predictive
+  + PPN (A1) on the effect, *without* the symbolic hypothesis-topology / assumption reasoning.
+- **Symbolic-only baseline:** logical/rule-based or equivalence-topology classifier (B1, C1) of the
+  null cause *without* quantified Bayesian evidence.
+- **Frequentist NHST baseline (naive control):** p-value "fail to reject ⇒ robust" — expected to be
+  the weakest, demonstrating the core problem.
+- **TOST / equivalence-test baseline:** a strong statistics-only contender (B1) the hybrid should
+  still exceed by adding cause-attribution.
+
+## 5. Evaluation Metrics
+- **Cause-classification accuracy / macro-F1** over the three classes {genuine robustness, weak
+  intervention, design flaw} — the headline metric (matches hypothesis claim).
+- **Calibration** of evidence (A2): PPC/posterior-probability calibration curves, ECE.
+- **Confusion structure:** especially robustness↔weak-intervention confusions (the hard pair).
+- **Power / detection** vs intervention strength (A6, D3): does the framework correctly flag
+  underpowered nulls? (sensitivity as a function of true effect size & N).
+- **Bilateral metrics** (C2): separate evidence-for vs evidence-against, not collapsed.
+- **Ablations:** hybrid vs Bayesian-only vs symbolic-only on identical data (the core experiment).
+
+## 6. Datasets in the Literature
+- **HarmBench** (D2): attack-success-rate matrices over 18 methods × 33 models/defenses — real
+  graded interventions; many "robust" (null) cells. Public.
+- **Red-teaming generators** (D3, D4): produce interventions of controllable strength; can label
+  ground-truth effect.
+- **PPN/SPC synthetic suites** (A1, A2): Gaussian mixtures, factor models — clean ground-truth for
+  the Bayesian-criticism layer.
+- **Sanity-check control designs** (E1): cascading randomization → known-null and known-effect cases.
+- No dataset *labels null-result causes* directly → strong case for a **semi-synthetic generator**
+  (see datasets/ and recommendations below).
+
+## 7. Gaps and Opportunities
+- **No existing benchmark labels the *cause* of a null result.** The entire literature diagnoses
+  models or methods, not the *epistemic status of null findings*. This is the project's core gap and
+  motivates a synthetic/semi-synthetic dataset with ground-truth causes.
+- **Bayesian and symbolic methods are used separately** for this purpose; the explicit *fusion*
+  (symbolic hypothesis-topology + identifiability reasoning gating Bayesian evidence) is novel.
+- **Equivalence-confirmability (B1) and identifiability (D1) are rarely operationalized** as a
+  practical diagnostic checklist — an opportunity for the symbolic layer.
+- **Calibration of null-evidence is under-addressed** in alignment evals (relevant: A2).
+
+## 8. Recommendations for Our Experiment
+- **Recommended data:** Build a **semi-synthetic null-result generator** with ground-truth labels in
+  {genuine robustness, weak intervention, design flaw}. Anchor realism on **HarmBench-style ASR
+  matrices** (D2) and graded red-teaming (D3/D4); use clean synthetic Gaussian/two-sample cases
+  (A1, A7) for the Bayesian layer; include sanity-check-style positive/negative controls (E1).
+- **Recommended Bayesian layer:** posterior-probability of the null via a Bayes factor *and* a
+  relative belief ratio (A4) with **prior sensitivity analysis** (A5); **split predictive checks**
+  for calibration (A2); **Pólya-tree two-sample** evidence for distributional equality (A7);
+  sequential aggregation across seeds (A6).
+- **Recommended symbolic layer:** encode each experiment's **hypothesis topology + equivalence
+  margin** (B1) and **assumptions/intervention logic** as weighted logical constraints (C1), with
+  **bilateral (paraconsistent) truth** for evidence-for vs against (C2); optionally a **prior over
+  symbolic cause-explanations** scored by MDL (C3); an **identifiability/indistinguishability check**
+  per D1.
+- **Recommended fusion:** symbolic layer first decides *confirmability/identifiability* (is this null
+  even interpretable, and as what?), then the Bayesian layer *quantifies* evidence within that
+  admissible structure; combine into a 3-way cause classification.
+- **Recommended baselines:** NHST-naive, TOST/equivalence-only, Bayesian-only (BF+PPN), symbolic-only
+  — the ablations that the hybrid must beat (matches the hypothesis directly).
+- **Recommended metrics:** 3-way cause macro-F1 (headline), calibration/ECE, robustness↔weak
+  confusion rate, detection-vs-effect-size curves.
+- **Methodological cautions:** Bayes factors are prior-fragile (A5) — always run sensitivity;
+  PPCs are miscalibrated (A2) — prefer SPCs; behavioral evals are identifiability-limited (D1) — do
+  not over-claim "robustness" from black-box nulls.
+
+
+════════════════════════════════════════════════════════════════════════════════
+                          PAPER REQUIREMENTS
+════════════════════════════════════════════════════════════════════════════════
+
+Generate a complete academic paper with the following structure:
+
+1. TITLE
+   - Clear, specific, informative
+   - Should convey main finding or contribution
+
+2. AUTHOR
+   - Use this exact author line in the \author{} block: NeuriCo
+
+3. ABSTRACT (150-250 words)
+   - Problem statement
+   - Approach
+   - Key results
+   - Significance
+
+4. INTRODUCTION
+   - Research problem and motivation
+   - Gap in existing work
+   - Our contribution (be specific)
+   - Paper organization
+
+5. RELATED WORK
+   - Organized by theme/approach
+   - Position our work relative to prior work
+   - Cite papers from literature review
+
+6. METHODOLOGY
+   - Clear description of approach
+   - Experimental setup
+   - Datasets used
+   - Evaluation metrics
+   - Baselines
+
+7. RESULTS
+   - Present results with tables and figures
+   - Statistical analysis
+   - Comparison to baselines
+   - Ablation studies (if applicable)
+
+8. DISCUSSION
+   - Interpretation of results
+   - Limitations
+   - Broader implications
+
+9. CONCLUSION
+   - Summary of contributions
+   - Key findings
+   - Future work
+
+10. REFERENCES
+   - BibTeX format
+   - All cited papers
+
+════════════════════════════════════════════════════════════════════════════════
+                          OUTPUT FORMAT
+════════════════════════════════════════════════════════════════════════════════
+
+Create a MODULAR LaTeX project with the following directory structure:
+
+paper_draft/
+├── main.tex              # Main file that imports all sections
+├── references.bib        # BibTeX references
+├── sections/
+│   ├── abstract.tex      # Abstract content
+│   ├── introduction.tex  # Introduction section
+│   ├── related_work.tex  # Related work section
+│   ├── methodology.tex   # Methodology section
+│   ├── results.tex       # Results section
+│   ├── discussion.tex    # Discussion section
+│   └── conclusion.tex    # Conclusion section
+├── figures/              # Directory for any generated figures
+├── tables/               # Directory for complex standalone tables
+└── appendix/             # Directory for appendix sections (if needed)
+
+INSTRUCTIONS:
+1. First, create the directory structure above (mkdir -p paper_draft/sections paper_draft/figures paper_draft/tables paper_draft/appendix)
+2. Write main.tex using the EXACT preamble for NEURIPS:
+
+   \documentclass{article}
+   \usepackage[final]{neurips_2025}  % NEURIPS style (neurips_2025.sty is in paper_draft/)
+   \usepackage[hidelinks]{hyperref}  % REQUIRED: clickable links
+   \usepackage{booktabs}  % REQUIRED: professional tables
+   \usepackage{graphicx}
+   \usepackage{amsmath,amssymb}
+
+   % Import command files
+   \input{commands/math}
+   \input{commands/general}
+   \input{commands/macros}
+
+   % Use this bibliography style:
+   \bibliographystyle{plainnat}
+
+   \author{NeuriCo}
+
+   - Use \input{sections/...} to include each section
+   - Use \bibliography{references} for references
+3. Write each section file with COMPLETE content (no placeholders)
+4. Each section file should include its \section{} command
+5. Write references.bib with all citations in BibTeX format
+6. After writing all files, compile the paper:
+   cd paper_draft && pdflatex -interaction=nonstopmode main.tex && bibtex main && pdflatex -interaction=nonstopmode main.tex && pdflatex -interaction=nonstopmode main.tex
+
+This modular structure allows humans to easily:
+- Edit individual sections without navigating a large file
+- Track changes per section
+- Reuse sections across different paper versions
+
+════════════════════════════════════════════════════════════════════════════════
+                          QUALITY REQUIREMENTS
+════════════════════════════════════════════════════════════════════════════════
+
+- Academic tone throughout
+- All claims must be supported by data from the experiment report
+- Proper citations using \cite{} commands
+- Clear figures and tables with proper captions
+- NO placeholder text - every section must have real content
+- The paper MUST compile without errors
+- If compilation fails, debug and fix the LaTeX errors
+
+════════════════════════════════════════════════════════════════════════════════
+                          LAB WRITING STYLE
+════════════════════════════════════════════════════════════════════════════════
+
+Follow these lab-specific conventions to match our paper style:
+
+1. LANGUAGE STYLE:
+   - Use active voice: "We propose", "We examine", "We focus on"
+   - Be direct and confident: "Our main question is...", "We hypothesize that..."
+   - State things clearly and simply - prefer plain language over jargon
+   - Use bold questions as paragraph organizers: {\bf what is X?}
+   - Include specific quantitative claims: "8.97% over baseline"
+   - Avoid fancy wording: "utilize" → "use", "facilitate" → "help"
+
+2. INTRODUCTION STRUCTURE:
+   - Engaging hook (get to the point quickly)
+   - Problem importance
+   - Gap identification
+   - Your approach with method figure reference
+   - Quantitative preview of results
+   - Contribution bullets (3-4 items, action verbs)
+
+3. CONTRIBUTION LISTS:
+   \begin{itemize}[leftmargin=*,itemsep=0pt,topsep=0pt]
+       \item We propose...
+       \item We conduct...
+       \item We complement...
+   \end{itemize}
+
+4. MODULAR COMMANDS STRUCTURE:
+   Command templates are pre-copied to paper_draft/commands/:
+   - math.tex: Math notation macros
+   - general.tex: Formatting macros
+   - macros.tex: Project-specific term definitions (customize this for your paper)
+
+   In main.tex, include:
+   \input{commands/math}
+   \input{commands/general}
+   \input{commands/macros}
+
+5. REFERENCE CONVENTIONS:
+   Use reference macros from math.tex:
+   - \figref{fig:name} for "figure 1" (lowercase, in-sentence)
+   - \Figref{fig:name} for "Figure 1" (capitalized, start of sentence)
+   - \secref{sec:name} for "section 2"
+
+6. TEXT FORMATTING:
+   - Use \para{Header text} for bold paragraph headers
+   - Define method/dataset names with \textsc and \xspace:
+     \newcommand{\methodname}{\textsc{MethodName}\xspace}
+
+7. TABLE FORMATTING:
+   - Use booktabs package (no vertical lines)
+   - Use \resizebox{\textwidth}{!}{...} for wide tables
+   - Use @{} to remove padding at table edges
+   - Use \cmidrule(lr){x-y} for sub-headers
+   - Use \textsc{} for dataset/method names in headers
+   - Bold best results with {\bf ...}
+
+8. FIGURE FORMATTING:
+   - Use 0.32\textwidth for 3-column subfigures
+   - Use 0.95\linewidth for full-width figures
+   - Use \input{figures/legend} for shared legends
+   - Write self-contained captions explaining key observations
+
+9. RESULTS PRESENTATION:
+   - Define \increase and \decrease for colored arrows (green up, red down)
+   - Bold best results in tables
+   - Report confidence intervals when available
+
+10. ALGORITHM STYLING:
+    - Use algpseudocode with [noend]
+    - Use \triangleright for comments
+
+11. HYPERLINKS (REQUIRED):
+    - Always use \usepackage[hidelinks]{hyperref} or with colored links
+    - All citations, section refs, figure refs, table refs must be clickable
+    - This is essential for reader navigation
+
+════════════════════════════════════════════════════════════════════════════════
+                          WORKFLOW: REVIEW AND REFLECT
+════════════════════════════════════════════════════════════════════════════════
+
+Before calling finish, you MUST complete these review steps:
+
+1. REVIEW RESOURCES (at the start):
+   - Read .claude/skills/paper-writer/SKILL.md for detailed guidance
+   - Study templates/paper_writing/lab_style_guide.md for style conventions
+   - Browse paper_examples/ for formatting and language patterns
+
+2. SELF-REFLECTION (before finishing):
+   After writing all sections, review your work against these criteria:
+
+   LANGUAGE CHECK:
+   - [ ] Is the writing clear and jargon-free?
+   - [ ] Are claims specific with quantitative support?
+   - [ ] Is active voice used throughout?
+
+   FORMATTING CHECK:
+   - [ ] Does main.tex include \input{commands/math}, \input{commands/general}, \input{commands/macros}?
+   - [ ] Is hyperref package included for clickable references?
+   - [ ] Do tables use booktabs (no vertical lines)?
+   - [ ] Are best results bolded in tables?
+   - [ ] Are figures/tables properly captioned?
+
+   STRUCTURE CHECK:
+   - [ ] Does introduction follow: hook → importance → gap → approach → preview → contributions?
+   - [ ] Are contribution bullets specific with action verbs?
+   - [ ] Does the paper compile without errors?
+
+3. FIX ISSUES:
+   - Address any issues found in the self-reflection
+   - Re-compile and verify the PDF looks correct
+
+Only after completing this review should you consider the paper finished.

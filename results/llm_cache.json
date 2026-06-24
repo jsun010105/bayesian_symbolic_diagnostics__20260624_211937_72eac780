@@ -1,0 +1,752 @@
+{
+  "1436": {
+    "label": 0,
+    "reason": "The experiment was adequately powered with a strong intervention and valid measurement, and the observed effect is well within the equivalence margin.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The experiment was adequately powered with a strong intervention and valid measurement, and the observed effect is well within the equivalence margin.\"}"
+  },
+  "2557": {
+    "label": 0,
+    "reason": "The experiment was adequately powered with a strong intervention and valid measurement, and the observed effect is well within the equivalence margin, indicating genuine invariance.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The experiment was adequately powered with a strong intervention and valid measurement, and the observed effect is well within the equivalence margin, indicating genuine invariance.\"}"
+  },
+  "2546": {
+    "label": 0,
+    "reason": "The study was adequately powered with a strong intervention, valid measurement, and a small observed effect well within the equivalence margin, indicating true invariance.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The study was adequately powered with a strong intervention, valid measurement, and a small observed effect well within the equivalence margin, indicating true invariance.\"}"
+  },
+  "274": {
+    "label": 0,
+    "reason": "The experiment was adequately powered with a strong intervention and valid measurement, so the null result likely reflects genuine model invariance within the equivalence margin.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The experiment was adequately powered with a strong intervention and valid measurement, so the null result likely reflects genuine model invariance within the equivalence margin.\"}"
+  },
+  "2491": {
+    "label": 1,
+    "reason": "The sample size and measurement noise yield low power to detect effects near the equivalence margin, making a real effect likely undetectable.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The sample size and measurement noise yield low power to detect effects near the equivalence margin, making a real effect likely undetectable.\"}"
+  },
+  "2158": {
+    "label": 0,
+    "reason": "The experiment was well-powered with a strong intervention, valid measurement, and no confounds, so the null result likely reflects genuine invariance within the equivalence margin.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The experiment was well-powered with a strong intervention, valid measurement, and no confounds, so the null result likely reflects genuine invariance within the equivalence margin.\"}"
+  },
+  "224": {
+    "label": 0,
+    "reason": "The experiment was adequately powered with a strong intervention and a valid, identifiable, and confound-free design, so the null result likely reflects genuine model invariance.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The experiment was adequately powered with a strong intervention and a valid, identifiable, and confound-free design, so the null result likely reflects genuine model invariance.\"}"
+  },
+  "103": {
+    "label": 0,
+    "reason": "The experiment was well-powered with a strong intervention, valid measurement, and no confounds, so the null result likely reflects genuine model invariance within the equivalence margin.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The experiment was well-powered with a strong intervention, valid measurement, and no confounds, so the null result likely reflects genuine model invariance within the equivalence margin.\"}"
+  },
+  "248": {
+    "label": 1,
+    "reason": "The sample size and measurement noise yield low power to detect effects within the equivalence margin, so a real effect could be missed.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The sample size and measurement noise yield low power to detect effects within the equivalence margin, so a real effect could be missed.\"}"
+  },
+  "750": {
+    "label": 0,
+    "reason": "The experiment was adequately powered with a strong intervention and valid measurement, and the observed effect is well within the equivalence margin, indicating genuine invariance.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The experiment was adequately powered with a strong intervention and valid measurement, and the observed effect is well within the equivalence margin, indicating genuine invariance.\"}"
+  },
+  "2301": {
+    "label": 0,
+    "reason": "The experiment was adequately powered with a strong intervention, valid measurement, and the observed mean difference is within the predefined equivalence margin.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The experiment was adequately powered with a strong intervention, valid measurement, and the observed mean difference is within the predefined equivalence margin.\"}"
+  },
+  "1425": {
+    "label": 0,
+    "reason": "The experiment was well-powered with a strong intervention, valid measurement, and an equivalence margin, so the null result likely reflects genuine model invariance.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The experiment was well-powered with a strong intervention, valid measurement, and an equivalence margin, so the null result likely reflects genuine model invariance.\"}"
+  },
+  "2402": {
+    "label": 0,
+    "reason": "The intervention was strong, the study was adequately powered, measurement was valid, and the observed effect was within the equivalence margin, indicating true invariance.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The intervention was strong, the study was adequately powered, measurement was valid, and the observed effect was within the equivalence margin, indicating true invariance.\"}"
+  },
+  "1556": {
+    "label": 1,
+    "reason": "The experiment is underpowered given the high measurement noise (sd=1.49) relative to the small equivalence margin (+/-0.12) and sample size (N=100 per arm), making it unlikely to detect anything but large effects.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The experiment is underpowered given the high measurement noise (sd=1.49) relative to the small equivalence margin (+/-0.12) and sample size (N=100 per arm), making it unlikely to detect anything but large effects.\"}"
+  },
+  "1152": {
+    "label": 0,
+    "reason": "The experiment was well-powered with a strong intervention, valid measurement, and an observed mean difference within the equivalence margin, indicating genuine invariance.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The experiment was well-powered with a strong intervention, valid measurement, and an observed mean difference within the equivalence margin, indicating genuine invariance.\"}"
+  },
+  "81": {
+    "label": 0,
+    "reason": "The experiment was well-powered with a strong intervention, valid measurement, and no confounds, so the null result likely reflects genuine invariance.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The experiment was well-powered with a strong intervention, valid measurement, and no confounds, so the null result likely reflects genuine invariance.\"}"
+  },
+  "125": {
+    "label": 1,
+    "reason": "The observed mean difference exceeds the equivalence margin, but high measurement noise and moderate sample size make the experiment underpowered to detect effects within the specified margin.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The observed mean difference exceeds the equivalence margin, but high measurement noise and moderate sample size make the experiment underpowered to detect effects within the specified margin.\"}"
+  },
+  "1874": {
+    "label": 0,
+    "reason": "The experiment was adequately powered with a strong intervention, valid measurement, and no confounds, so the small observed effect likely reflects genuine robustness.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The experiment was adequately powered with a strong intervention, valid measurement, and no confounds, so the small observed effect likely reflects genuine robustness.\"}"
+  },
+  "2024": {
+    "label": 0,
+    "reason": "The experiment was well-powered with a strong intervention, valid measurement, and an equivalence margin, so the null result likely reflects genuine invariance.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The experiment was well-powered with a strong intervention, valid measurement, and an equivalence margin, so the null result likely reflects genuine invariance.\"}"
+  },
+  "1745": {
+    "label": null,
+    "reason": "",
+    "raw": null
+  },
+  "2996": {
+    "label": null,
+    "reason": "",
+    "raw": null
+  },
+  "18": {
+    "label": 0,
+    "reason": "The experiment was adequately powered with a strong intervention and valid measurement, and the observed mean difference is outside the equivalence margin, indicating genuine invariance.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The experiment was adequately powered with a strong intervention and valid measurement, and the observed mean difference is outside the equivalence margin, indicating genuine invariance.\"}"
+  },
+  "491": {
+    "label": 0,
+    "reason": "The experiment was adequately powered with a strong intervention and valid measurement, and the observed effect is well within the equivalence margin, indicating true invariance.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The experiment was adequately powered with a strong intervention and valid measurement, and the observed effect is well within the equivalence margin, indicating true invariance.\"}"
+  },
+  "364": {
+    "label": 0,
+    "reason": "The experiment was adequately powered with a strong intervention and a meaningful equivalence margin, so the null result likely reflects genuine invariance.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The experiment was adequately powered with a strong intervention and a meaningful equivalence margin, so the null result likely reflects genuine invariance.\"}"
+  },
+  "2680": {
+    "label": 0,
+    "reason": "The experiment used a strong intervention, valid measurement, sufficient sample size, and an equivalence margin, so the null result likely reflects genuine model invariance.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The experiment used a strong intervention, valid measurement, sufficient sample size, and an equivalence margin, so the null result likely reflects genuine model invariance.\"}"
+  },
+  "112": {
+    "label": 0,
+    "reason": "The experiment was adequately powered with a strong intervention and valid measurement, and the observed effect is well within the equivalence margin, indicating genuine invariance.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The experiment was adequately powered with a strong intervention and valid measurement, and the observed effect is well within the equivalence margin, indicating genuine invariance.\"}"
+  },
+  "5": {
+    "label": 0,
+    "reason": "The experiment was adequately powered with a strong intervention and valid measurement, and the observed effect is well within the equivalence margin.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The experiment was adequately powered with a strong intervention and valid measurement, and the observed effect is well within the equivalence margin.\"}"
+  },
+  "2761": {
+    "label": 0,
+    "reason": "The experiment was well-powered with a strong intervention, valid measurement, and no confounds, so the small observed effect likely reflects genuine model invariance.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The experiment was well-powered with a strong intervention, valid measurement, and no confounds, so the small observed effect likely reflects genuine model invariance.\"}"
+  },
+  "862": {
+    "label": 0,
+    "reason": "The experiment was well-powered with a strong intervention, valid measurement, and an equivalence margin, so the null result likely reflects genuine model invariance.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The experiment was well-powered with a strong intervention, valid measurement, and an equivalence margin, so the null result likely reflects genuine model invariance.\"}"
+  },
+  "2835": {
+    "label": 0,
+    "reason": "The experiment was well-powered with a strong intervention, valid measurement, and an equivalence margin, so the null result likely reflects genuine invariance.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The experiment was well-powered with a strong intervention, valid measurement, and an equivalence margin, so the null result likely reflects genuine invariance.\"}"
+  },
+  "498": {
+    "label": 0,
+    "reason": "The experiment was adequately powered with a strong intervention and valid measurement, and the observed effect is well within the equivalence margin, indicating true invariance.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The experiment was adequately powered with a strong intervention and valid measurement, and the observed effect is well within the equivalence margin, indicating true invariance.\"}"
+  },
+  "1849": {
+    "label": 0,
+    "reason": "The experiment was adequately powered with a strong intervention, valid measurement, and a tight equivalence margin, so the null result likely reflects genuine invariance.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The experiment was adequately powered with a strong intervention, valid measurement, and a tight equivalence margin, so the null result likely reflects genuine invariance.\"}"
+  },
+  "51": {
+    "label": 1,
+    "reason": "The observed mean difference exceeds the equivalence margin but high measurement noise and moderate sample size likely render the experiment underpowered to detect effects within the specified margin.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The observed mean difference exceeds the equivalence margin but high measurement noise and moderate sample size likely render the experiment underpowered to detect effects within the specified margin.\"}"
+  },
+  "1944": {
+    "label": 1,
+    "reason": "The observed mean difference is much larger than the equivalence margin, but high measurement noise and moderate sample size make the experiment underpowered to confirm equivalence.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The observed mean difference is much larger than the equivalence margin, but high measurement noise and moderate sample size make the experiment underpowered to confirm equivalence.\"}"
+  },
+  "1195": {
+    "label": 0,
+    "reason": "The experiment was well-powered with a strong intervention and valid measurement, so the null result likely reflects genuine invariance within the specified equivalence margin.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The experiment was well-powered with a strong intervention and valid measurement, so the null result likely reflects genuine invariance within the specified equivalence margin.\"}"
+  },
+  "2433": {
+    "label": 0,
+    "reason": "The experiment was well-powered with a strong intervention, valid measurement, and no confounds, so the null result likely reflects genuine model invariance within the equivalence margin.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The experiment was well-powered with a strong intervention, valid measurement, and no confounds, so the null result likely reflects genuine model invariance within the equivalence margin.\"}"
+  },
+  "1825": {
+    "label": 1,
+    "reason": "The observed mean difference (-0.272) is just outside the equivalence margin (+/-0.25), but high measurement noise (sd=1.51) and moderate sample size (N=200) make the experiment underpowered to confidently detect or rule out small effects.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The observed mean difference (-0.272) is just outside the equivalence margin (+/-0.25), but high measurement noise (sd=1.51) and moderate sample size (N=200) make the experiment underpowered to confidently detect or rule out small effects.\"}"
+  },
+  "1576": {
+    "label": 1,
+    "reason": "Despite a strong intervention, the high measurement noise relative to sample size makes the experiment underpowered to detect effects within the equivalence margin.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"Despite a strong intervention, the high measurement noise relative to sample size makes the experiment underpowered to detect effects within the equivalence margin.\"}"
+  },
+  "2589": {
+    "label": 0,
+    "reason": "The study was adequately powered with a strong intervention and valid measurement, and the observed mean difference is well within the equivalence margin, indicating genuine invariance.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The study was adequately powered with a strong intervention and valid measurement, and the observed mean difference is well within the equivalence margin, indicating genuine invariance.\"}"
+  },
+  "1243": {
+    "label": 0,
+    "reason": "The study was adequately powered with a strong intervention and valid measurement, so the model is likely genuinely invariant within the equivalence margin.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The study was adequately powered with a strong intervention and valid measurement, so the model is likely genuinely invariant within the equivalence margin.\"}"
+  },
+  "873": {
+    "label": 0,
+    "reason": "The experiment was adequately powered with a strong intervention, valid measurement, and an equivalence margin, so the null result likely reflects genuine model invariance.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The experiment was adequately powered with a strong intervention, valid measurement, and an equivalence margin, so the null result likely reflects genuine model invariance.\"}"
+  },
+  "1607": {
+    "label": 0,
+    "reason": "The experiment was well-powered with a strong intervention, valid measurement, and no confounds, so the null result likely reflects genuine invariance.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The experiment was well-powered with a strong intervention, valid measurement, and no confounds, so the null result likely reflects genuine invariance.\"}"
+  },
+  "23": {
+    "label": 0,
+    "reason": "The experiment was adequately powered with a strong intervention, valid measurement, and no confounds, so the null result likely reflects genuine model invariance within the equivalence margin.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The experiment was adequately powered with a strong intervention, valid measurement, and no confounds, so the null result likely reflects genuine model invariance within the equivalence margin.\"}"
+  },
+  "2210": {
+    "label": 0,
+    "reason": "The experiment was adequately powered with a moderately strong intervention, valid measurement, and a small observed effect well within the equivalence margin, indicating genuine invariance.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The experiment was adequately powered with a moderately strong intervention, valid measurement, and a small observed effect well within the equivalence margin, indicating genuine invariance.\"}"
+  },
+  "789": {
+    "label": 0,
+    "reason": "The experiment was adequately powered with a strong intervention and valid measurement, and the observed effect is well within the equivalence margin.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The experiment was adequately powered with a strong intervention and valid measurement, and the observed effect is well within the equivalence margin.\"}"
+  },
+  "1836": {
+    "label": 0,
+    "reason": "The experiment was adequately powered with a strong intervention and valid measurement, and the observed effect is well within the equivalence margin, indicating genuine invariance.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The experiment was adequately powered with a strong intervention and valid measurement, and the observed effect is well within the equivalence margin, indicating genuine invariance.\"}"
+  },
+  "1554": {
+    "label": 0,
+    "reason": "The experiment was adequately powered with a moderate intervention and a valid equivalence test, so the null result likely reflects genuine model invariance.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The experiment was adequately powered with a moderate intervention and a valid equivalence test, so the null result likely reflects genuine model invariance.\"}"
+  },
+  "1964": {
+    "label": 1,
+    "reason": "The observed effect is much smaller than the measurement noise and equivalence margin, suggesting the experiment is underpowered to detect plausible effects.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The observed effect is much smaller than the measurement noise and equivalence margin, suggesting the experiment is underpowered to detect plausible effects.\"}"
+  },
+  "1405": {
+    "label": 0,
+    "reason": "The experiment was well-powered with a strong intervention, valid measurement, and an equivalence margin, so the null result likely reflects genuine invariance.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The experiment was well-powered with a strong intervention, valid measurement, and an equivalence margin, so the null result likely reflects genuine invariance.\"}"
+  },
+  "1610": {
+    "label": 0,
+    "reason": "The experiment was well-powered with a strong intervention and valid measurement, so the null result likely reflects genuine model invariance within the specified equivalence margin.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The experiment was well-powered with a strong intervention and valid measurement, so the null result likely reflects genuine model invariance within the specified equivalence margin.\"}"
+  },
+  "2221": {
+    "label": 1,
+    "reason": "The intervention strength is extremely low (0.02), making it unlikely to detect an effect even if one exists.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The intervention strength is extremely low (0.02), making it unlikely to detect an effect even if one exists.\"}"
+  },
+  "581": {
+    "label": 1,
+    "reason": "The intervention was relatively weak (0.34/1) and the experiment was underpowered given high measurement noise and a small sample size, making it likely that a real effect was missed.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The intervention was relatively weak (0.34/1) and the experiment was underpowered given high measurement noise and a small sample size, making it likely that a real effect was missed.\"}"
+  },
+  "2494": {
+    "label": 1,
+    "reason": "The sample size is small and measurement noise is high relative to the equivalence margin, making the experiment underpowered to detect a real effect.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The sample size is small and measurement noise is high relative to the equivalence margin, making the experiment underpowered to detect a real effect.\"}"
+  },
+  "904": {
+    "label": 1,
+    "reason": "The experiment is underpowered due to small sample size, high measurement noise, and a relatively weak intervention, making it unlikely to detect a real effect.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The experiment is underpowered due to small sample size, high measurement noise, and a relatively weak intervention, making it unlikely to detect a real effect.\"}"
+  },
+  "2608": {
+    "label": 1,
+    "reason": "The intervention was weak (0.18/1), sample size was low (N=10), and measurement noise was high (sd=1.22), making the experiment underpowered to detect effects within the tight equivalence margin (+/-0.23).",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The intervention was weak (0.18/1), sample size was low (N=10), and measurement noise was high (sd=1.22), making the experiment underpowered to detect effects within the tight equivalence margin (+/-0.23).\"}"
+  },
+  "2615": {
+    "label": 1,
+    "reason": "The intervention was moderate (0.40/1), sample size was small (N=30), and measurement noise was high (sd=1.01), making the experiment underpowered to detect effects within the tight equivalence margin (+/-0.16).",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The intervention was moderate (0.40/1), sample size was small (N=30), and measurement noise was high (sd=1.01), making the experiment underpowered to detect effects within the tight equivalence margin (+/-0.16).\"}"
+  },
+  "1080": {
+    "label": 1,
+    "reason": "The sample size is small and the measurement noise is high relative to the equivalence margin, making the experiment underpowered to detect plausible effects.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The sample size is small and the measurement noise is high relative to the equivalence margin, making the experiment underpowered to detect plausible effects.\"}"
+  },
+  "257": {
+    "label": 1,
+    "reason": "The sample size is small relative to the measurement noise, making the experiment underpowered to detect effects near the equivalence margin.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The sample size is small relative to the measurement noise, making the experiment underpowered to detect effects near the equivalence margin.\"}"
+  },
+  "1913": {
+    "label": 1,
+    "reason": "Despite a strong intervention, the sample size is very small and measurement noise is high, making the experiment underpowered to detect effects within the equivalence margin.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"Despite a strong intervention, the sample size is very small and measurement noise is high, making the experiment underpowered to detect effects within the equivalence margin.\"}"
+  },
+  "2178": {
+    "label": 1,
+    "reason": "The intervention was weak (strength 0.09), sample size was small (N=20), and measurement noise was high (sd=0.51), making the experiment underpowered to detect plausible effects.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The intervention was weak (strength 0.09), sample size was small (N=20), and measurement noise was high (sd=0.51), making the experiment underpowered to detect plausible effects.\"}"
+  },
+  "132": {
+    "label": 1,
+    "reason": "The intervention was weak (strength 0.23), sample size was low (N=10), and measurement noise was high (sd=1.44), making the experiment underpowered to detect plausible effects.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The intervention was weak (strength 0.23), sample size was low (N=10), and measurement noise was high (sd=1.44), making the experiment underpowered to detect plausible effects.\"}"
+  },
+  "1128": {
+    "label": 1,
+    "reason": "The experiment is underpowered to detect effects within the narrow equivalence margin given the high measurement noise and moderate sample size.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The experiment is underpowered to detect effects within the narrow equivalence margin given the high measurement noise and moderate sample size.\"}"
+  },
+  "299": {
+    "label": 1,
+    "reason": "Despite a strong intervention, the sample size is very small and measurement noise is high, making the experiment underpowered to detect effects within the equivalence margin.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"Despite a strong intervention, the sample size is very small and measurement noise is high, making the experiment underpowered to detect effects within the equivalence margin.\"}"
+  },
+  "2454": {
+    "label": 1,
+    "reason": "The intervention strength is low (0.17), so the experiment is likely underpowered to detect an effect within the specified equivalence margin.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The intervention strength is low (0.17), so the experiment is likely underpowered to detect an effect within the specified equivalence margin.\"}"
+  },
+  "2764": {
+    "label": 1,
+    "reason": "The intervention strength is low (0.27), so a real effect may exist but is likely too small to detect with this setup.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The intervention strength is low (0.27), so a real effect may exist but is likely too small to detect with this setup.\"}"
+  },
+  "974": {
+    "label": 1,
+    "reason": "The experiment is underpowered due to high measurement noise and a small sample size relative to the equivalence margin, making it unlikely to detect a real effect.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The experiment is underpowered due to high measurement noise and a small sample size relative to the equivalence margin, making it unlikely to detect a real effect.\"}"
+  },
+  "2269": {
+    "label": 1,
+    "reason": "The intervention strength is very low (0.04), making it unlikely to detect an effect even with valid measurement and no confounds.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The intervention strength is very low (0.04), making it unlikely to detect an effect even with valid measurement and no confounds.\"}"
+  },
+  "1634": {
+    "label": 1,
+    "reason": "The sample size is small and the intervention is moderate, making the experiment underpowered to detect effects within the specified equivalence margin.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The sample size is small and the intervention is moderate, making the experiment underpowered to detect effects within the specified equivalence margin.\"}"
+  },
+  "582": {
+    "label": 1,
+    "reason": "The experiment is underpowered due to high measurement noise and a small sample size relative to the tight equivalence margin, making it unlikely to detect anything but large effects.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The experiment is underpowered due to high measurement noise and a small sample size relative to the tight equivalence margin, making it unlikely to detect anything but large effects.\"}"
+  },
+  "876": {
+    "label": 1,
+    "reason": "The intervention was weak (strength 0.07), sample size was modest, and measurement noise was high relative to the effect size, making the experiment underpowered to detect a real effect.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The intervention was weak (strength 0.07), sample size was modest, and measurement noise was high relative to the effect size, making the experiment underpowered to detect a real effect.\"}"
+  },
+  "1639": {
+    "label": 1,
+    "reason": "The intervention strength is low (0.16), making it likely that any real effect is too small to detect given the noise and sample size.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The intervention strength is low (0.16), making it likely that any real effect is too small to detect given the noise and sample size.\"}"
+  },
+  "669": {
+    "label": 1,
+    "reason": "The sample size is small and measurement noise is high relative to the equivalence margin, making the experiment underpowered to detect effects near the margin.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The sample size is small and measurement noise is high relative to the equivalence margin, making the experiment underpowered to detect effects near the margin.\"}"
+  },
+  "2912": {
+    "label": 1,
+    "reason": "Despite a strong intervention, the small sample size and high measurement noise make the experiment underpowered to detect effects within the narrow equivalence margin.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"Despite a strong intervention, the small sample size and high measurement noise make the experiment underpowered to detect effects within the narrow equivalence margin.\"}"
+  },
+  "2626": {
+    "label": 1,
+    "reason": "The observed mean difference is larger than the equivalence margin, but high measurement noise and moderate sample size make the experiment underpowered to confidently detect or rule out effects of this size.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The observed mean difference is larger than the equivalence margin, but high measurement noise and moderate sample size make the experiment underpowered to confidently detect or rule out effects of this size.\"}"
+  },
+  "1161": {
+    "label": 1,
+    "reason": "The intervention was weak (0.20/1.0) and the sample size was small (N=10), making the experiment underpowered to detect effects within the tight equivalence margin (+/-0.16) given the high measurement noise (sd=1.96).",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The intervention was weak (0.20/1.0) and the sample size was small (N=10), making the experiment underpowered to detect effects within the tight equivalence margin (+/-0.16) given the high measurement noise (sd=1.96).\"}"
+  },
+  "1492": {
+    "label": 1,
+    "reason": "The experiment is underpowered to detect effects within the narrow equivalence margin given the high measurement noise and moderate intervention strength.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The experiment is underpowered to detect effects within the narrow equivalence margin given the high measurement noise and moderate intervention strength.\"}"
+  },
+  "1801": {
+    "label": 1,
+    "reason": "The intervention strength is low (0.17/1), so the experiment was likely underpowered to detect a real effect even with valid measurement and no confounds.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The intervention strength is low (0.17/1), so the experiment was likely underpowered to detect a real effect even with valid measurement and no confounds.\"}"
+  },
+  "156": {
+    "label": 1,
+    "reason": "The sample size is small and measurement noise is high relative to the equivalence margin, making the experiment underpowered to detect effects within the specified margin.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The sample size is small and measurement noise is high relative to the equivalence margin, making the experiment underpowered to detect effects within the specified margin.\"}"
+  },
+  "2870": {
+    "label": 0,
+    "reason": "The experiment was well-powered with a strong intervention, valid measurement, and no confounds, so the null result likely reflects genuine invariance.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The experiment was well-powered with a strong intervention, valid measurement, and no confounds, so the null result likely reflects genuine invariance.\"}"
+  },
+  "406": {
+    "label": 1,
+    "reason": "Despite a maximal intervention, the sample size is very small and measurement noise is high, making the experiment underpowered to detect effects within the equivalence margin.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"Despite a maximal intervention, the sample size is very small and measurement noise is high, making the experiment underpowered to detect effects within the equivalence margin.\"}"
+  },
+  "1401": {
+    "label": 1,
+    "reason": "The intervention strength is low (0.22), making it likely that any real effect is too small to detect given the sample size and measurement noise.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The intervention strength is low (0.22), making it likely that any real effect is too small to detect given the sample size and measurement noise.\"}"
+  },
+  "209": {
+    "label": 1,
+    "reason": "The sample size is small and measurement noise is high relative to the equivalence margin, making the experiment underpowered to detect a real effect.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The sample size is small and measurement noise is high relative to the equivalence margin, making the experiment underpowered to detect a real effect.\"}"
+  },
+  "1852": {
+    "label": 1,
+    "reason": "The intervention strength is very low (0.03), making it unlikely to produce a detectable effect even with adequate sample size and measurement validity.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The intervention strength is very low (0.03), making it unlikely to produce a detectable effect even with adequate sample size and measurement validity.\"}"
+  },
+  "1291": {
+    "label": 1,
+    "reason": "The intervention was moderate (0.30/1) and measurement noise was high relative to the mean difference, making the experiment underpowered to detect small effects within the equivalence margin.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The intervention was moderate (0.30/1) and measurement noise was high relative to the mean difference, making the experiment underpowered to detect small effects within the equivalence margin.\"}"
+  },
+  "2017": {
+    "label": 1,
+    "reason": "The sample size is small and measurement noise is high relative to the equivalence margin, making the experiment underpowered to detect anything but large effects.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The sample size is small and measurement noise is high relative to the equivalence margin, making the experiment underpowered to detect anything but large effects.\"}"
+  },
+  "2186": {
+    "label": 0,
+    "reason": "The experiment was adequately powered with a strong intervention, valid measurement, and no confounds, so the null result likely reflects genuine model invariance within the equivalence margin.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The experiment was adequately powered with a strong intervention, valid measurement, and no confounds, so the null result likely reflects genuine model invariance within the equivalence margin.\"}"
+  },
+  "662": {
+    "label": 1,
+    "reason": "The intervention was weak (strength 0.28), sample size was modest, and the equivalence margin was much smaller than the observed noise, making the experiment underpowered to detect plausible effects.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The intervention was weak (strength 0.28), sample size was modest, and the equivalence margin was much smaller than the observed noise, making the experiment underpowered to detect plausible effects.\"}"
+  },
+  "1960": {
+    "label": 1,
+    "reason": "The experiment is underpowered due to small sample size, high measurement noise, and a moderate intervention strength, making it unlikely to detect anything but large effects.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The experiment is underpowered due to small sample size, high measurement noise, and a moderate intervention strength, making it unlikely to detect anything but large effects.\"}"
+  },
+  "1306": {
+    "label": 1,
+    "reason": "The sample size is small and measurement noise is high relative to the equivalence margin, making the experiment underpowered to detect effects of the expected size.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The sample size is small and measurement noise is high relative to the equivalence margin, making the experiment underpowered to detect effects of the expected size.\"}"
+  },
+  "1867": {
+    "label": 1,
+    "reason": "Despite a strong intervention, the high measurement noise relative to sample size makes the experiment underpowered to detect effects within the tight equivalence margin.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"Despite a strong intervention, the high measurement noise relative to sample size makes the experiment underpowered to detect effects within the tight equivalence margin.\"}"
+  },
+  "2752": {
+    "label": 1,
+    "reason": "The sample size is small and the measurement noise is high relative to the equivalence margin, making the experiment underpowered to detect anything but very large effects.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The sample size is small and the measurement noise is high relative to the equivalence margin, making the experiment underpowered to detect anything but very large effects.\"}"
+  },
+  "1219": {
+    "label": 1,
+    "reason": "The intervention was weak (strength 0.13), sample size was low (N=20), and measurement noise was high (sd=1.83), making the experiment underpowered to detect an effect.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The intervention was weak (strength 0.13), sample size was low (N=20), and measurement noise was high (sd=1.83), making the experiment underpowered to detect an effect.\"}"
+  },
+  "2225": {
+    "label": 1,
+    "reason": "The intervention was weak (0.16/1) and measurement noise was high relative to the mean difference, making the experiment underpowered to detect a real effect.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The intervention was weak (0.16/1) and measurement noise was high relative to the mean difference, making the experiment underpowered to detect a real effect.\"}"
+  },
+  "2568": {
+    "label": 1,
+    "reason": "The sample size is small and measurement noise is high relative to the equivalence margin, making the experiment underpowered to detect effects of the expected size.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The sample size is small and measurement noise is high relative to the equivalence margin, making the experiment underpowered to detect effects of the expected size.\"}"
+  },
+  "2197": {
+    "label": 0,
+    "reason": "The experiment was well-powered with a strong intervention, valid measurement, and no confounds, so the null result likely reflects genuine model invariance.",
+    "raw": "{\"label\": \"GENUINE_ROBUSTNESS\", \"reason\": \"The experiment was well-powered with a strong intervention, valid measurement, and no confounds, so the null result likely reflects genuine model invariance.\"}"
+  },
+  "2747": {
+    "label": 1,
+    "reason": "The experiment is underpowered due to high measurement noise and small sample size, making it unlikely to detect effects near the equivalence margin.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The experiment is underpowered due to high measurement noise and small sample size, making it unlikely to detect effects near the equivalence margin.\"}"
+  },
+  "942": {
+    "label": 2,
+    "reason": "The measurement is invalid, making the null result uninterpretable regardless of other factors.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"The measurement is invalid, making the null result uninterpretable regardless of other factors.\"}"
+  },
+  "1671": {
+    "label": 1,
+    "reason": "The intervention strength is moderate (0.35), measurement noise is high (sd=1.81), and sample size is modest (N=100), making the experiment underpowered to detect small effects within the equivalence margin.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The intervention strength is moderate (0.35), measurement noise is high (sd=1.81), and sample size is modest (N=100), making the experiment underpowered to detect small effects within the equivalence margin.\"}"
+  },
+  "574": {
+    "label": 1,
+    "reason": "Despite a strong intervention, the sample size is very small and the equivalence margin is extremely tight relative to the measurement noise, making the experiment underpowered to detect anything but very large effects.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"Despite a strong intervention, the sample size is very small and the equivalence margin is extremely tight relative to the measurement noise, making the experiment underpowered to detect anything but very large effects.\"}"
+  },
+  "2343": {
+    "label": 1,
+    "reason": "The intervention was weak (0.15/1), sample size was small (N=20), and measurement noise was high (sd=0.66), making the experiment underpowered to detect effects within the equivalence margin.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The intervention was weak (0.15/1), sample size was small (N=20), and measurement noise was high (sd=0.66), making the experiment underpowered to detect effects within the equivalence margin.\"}"
+  },
+  "140": {
+    "label": 1,
+    "reason": "The experiment is underpowered due to small sample size and high measurement noise relative to the equivalence margin, making it unlikely to detect a real effect.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The experiment is underpowered due to small sample size and high measurement noise relative to the equivalence margin, making it unlikely to detect a real effect.\"}"
+  },
+  "676": {
+    "label": 2,
+    "reason": "Evaluation-awareness/leakage and non-identifiable effect make the null result uninterpretable regardless of sample size or intervention strength.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"Evaluation-awareness/leakage and non-identifiable effect make the null result uninterpretable regardless of sample size or intervention strength.\"}"
+  },
+  "2785": {
+    "label": 2,
+    "reason": "Evaluation-awareness/leakage and non-identifiable effect make the null result uninterpretable regardless of other factors.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"Evaluation-awareness/leakage and non-identifiable effect make the null result uninterpretable regardless of other factors.\"}"
+  },
+  "2026": {
+    "label": 2,
+    "reason": "Evaluation-awareness/leakage and non-identifiability make the null result uninterpretable regardless of other factors.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"Evaluation-awareness/leakage and non-identifiability make the null result uninterpretable regardless of other factors.\"}"
+  },
+  "2529": {
+    "label": 2,
+    "reason": "Evaluation-awareness/leakage and non-identifiability make the null result uninterpretable regardless of power or intervention strength.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"Evaluation-awareness/leakage and non-identifiability make the null result uninterpretable regardless of power or intervention strength.\"}"
+  },
+  "1875": {
+    "label": 2,
+    "reason": "The measurement is invalid, making the null result uninterpretable regardless of other factors.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"The measurement is invalid, making the null result uninterpretable regardless of other factors.\"}"
+  },
+  "823": {
+    "label": 2,
+    "reason": "Evaluation-awareness/leakage and non-identifiability make the null result uninterpretable regardless of other factors.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"Evaluation-awareness/leakage and non-identifiability make the null result uninterpretable regardless of other factors.\"}"
+  },
+  "2720": {
+    "label": 2,
+    "reason": "A confound is present and the effect is not identifiable, making the null result uninterpretable.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"A confound is present and the effect is not identifiable, making the null result uninterpretable.\"}"
+  },
+  "1818": {
+    "label": 2,
+    "reason": "The hypothesis is a point null with no equivalence margin specified, making the null result logically unconfirmable.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"The hypothesis is a point null with no equivalence margin specified, making the null result logically unconfirmable.\"}"
+  },
+  "565": {
+    "label": 2,
+    "reason": "The hypothesis is a point null with no equivalence margin specified, making the null result logically unconfirmable.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"The hypothesis is a point null with no equivalence margin specified, making the null result logically unconfirmable.\"}"
+  },
+  "1115": {
+    "label": 2,
+    "reason": "Evaluation-awareness/leakage and non-identifiability make the null result uninterpretable regardless of sample size or intervention strength.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"Evaluation-awareness/leakage and non-identifiability make the null result uninterpretable regardless of sample size or intervention strength.\"}"
+  },
+  "45": {
+    "label": 2,
+    "reason": "Evaluation-awareness/leakage and non-identifiability make the null result uninterpretable regardless of other factors.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"Evaluation-awareness/leakage and non-identifiability make the null result uninterpretable regardless of other factors.\"}"
+  },
+  "919": {
+    "label": 2,
+    "reason": "Evaluation-awareness/leakage and non-identifiability make the null result uninterpretable regardless of other factors.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"Evaluation-awareness/leakage and non-identifiability make the null result uninterpretable regardless of other factors.\"}"
+  },
+  "1426": {
+    "label": 2,
+    "reason": "A confound is present and the effect is not identifiable, making the null result uninterpretable.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"A confound is present and the effect is not identifiable, making the null result uninterpretable.\"}"
+  },
+  "466": {
+    "label": 2,
+    "reason": "A confound is present and the effect is not identifiable, making the null result uninterpretable.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"A confound is present and the effect is not identifiable, making the null result uninterpretable.\"}"
+  },
+  "698": {
+    "label": 2,
+    "reason": "A confound is present and the effect is not identifiable, making the null result uninterpretable.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"A confound is present and the effect is not identifiable, making the null result uninterpretable.\"}"
+  },
+  "2286": {
+    "label": 1,
+    "reason": "The intervention strength is low (0.27), so a real effect may exist but is likely too small to detect with the current sample size and noise level.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The intervention strength is low (0.27), so a real effect may exist but is likely too small to detect with the current sample size and noise level.\"}"
+  },
+  "1551": {
+    "label": 2,
+    "reason": "A confound is present and the effect is not identifiable, making the null result uninterpretable.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"A confound is present and the effect is not identifiable, making the null result uninterpretable.\"}"
+  },
+  "1953": {
+    "label": 2,
+    "reason": "The measurement is invalid, making the null result uninterpretable regardless of other factors.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"The measurement is invalid, making the null result uninterpretable regardless of other factors.\"}"
+  },
+  "459": {
+    "label": 2,
+    "reason": "Evaluation-awareness/leakage and non-identifiability make the null result uninterpretable regardless of other factors.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"Evaluation-awareness/leakage and non-identifiability make the null result uninterpretable regardless of other factors.\"}"
+  },
+  "1518": {
+    "label": 2,
+    "reason": "The measurement is invalid, making the null result uninterpretable regardless of other factors.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"The measurement is invalid, making the null result uninterpretable regardless of other factors.\"}"
+  },
+  "1912": {
+    "label": 1,
+    "reason": "The intervention was moderate (0.33/1) and the sample size is small relative to the measurement noise, making the experiment underpowered to detect plausible effects.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The intervention was moderate (0.33/1) and the sample size is small relative to the measurement noise, making the experiment underpowered to detect plausible effects.\"}"
+  },
+  "2346": {
+    "label": 2,
+    "reason": "The measurement is invalid, making the null result uninterpretable regardless of other factors.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"The measurement is invalid, making the null result uninterpretable regardless of other factors.\"}"
+  },
+  "2116": {
+    "label": 2,
+    "reason": "Evaluation-awareness/leakage and non-identifiable effect make the null result uninterpretable regardless of other factors.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"Evaluation-awareness/leakage and non-identifiable effect make the null result uninterpretable regardless of other factors.\"}"
+  },
+  "1714": {
+    "label": 2,
+    "reason": "A confound is present and the effect is not identifiable, making the null result uninterpretable.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"A confound is present and the effect is not identifiable, making the null result uninterpretable.\"}"
+  },
+  "2645": {
+    "label": 2,
+    "reason": "Evaluation-awareness/leakage and non-identifiability make the null result uninterpretable regardless of other factors.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"Evaluation-awareness/leakage and non-identifiability make the null result uninterpretable regardless of other factors.\"}"
+  },
+  "453": {
+    "label": 2,
+    "reason": "Evaluation-awareness/leakage and non-identifiability make the null result uninterpretable regardless of other factors.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"Evaluation-awareness/leakage and non-identifiability make the null result uninterpretable regardless of other factors.\"}"
+  },
+  "433": {
+    "label": 2,
+    "reason": "The measurement is invalid, making the null result uninterpretable regardless of other factors.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"The measurement is invalid, making the null result uninterpretable regardless of other factors.\"}"
+  },
+  "2880": {
+    "label": 2,
+    "reason": "The measurement is invalid, making the null result uninterpretable regardless of other factors.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"The measurement is invalid, making the null result uninterpretable regardless of other factors.\"}"
+  },
+  "2683": {
+    "label": 2,
+    "reason": "A confound is present and the effect is not identifiable, making the null result uninterpretable.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"A confound is present and the effect is not identifiable, making the null result uninterpretable.\"}"
+  },
+  "2331": {
+    "label": 2,
+    "reason": "The measurement is invalid, making the null result uninterpretable regardless of other factors.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"The measurement is invalid, making the null result uninterpretable regardless of other factors.\"}"
+  },
+  "190": {
+    "label": 2,
+    "reason": "The measurement is invalid, making the null result uninterpretable regardless of other factors.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"The measurement is invalid, making the null result uninterpretable regardless of other factors.\"}"
+  },
+  "2693": {
+    "label": 2,
+    "reason": "The measurement is invalid, making the null result uninterpretable regardless of other factors.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"The measurement is invalid, making the null result uninterpretable regardless of other factors.\"}"
+  },
+  "79": {
+    "label": 2,
+    "reason": "The use of a point null hypothesis with no specified equivalence margin makes the null result logically unconfirmable.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"The use of a point null hypothesis with no specified equivalence margin makes the null result logically unconfirmable.\"}"
+  },
+  "281": {
+    "label": 2,
+    "reason": "Evaluation-awareness/leakage and non-identifiability make the null result uninterpretable regardless of power or intervention strength.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"Evaluation-awareness/leakage and non-identifiability make the null result uninterpretable regardless of power or intervention strength.\"}"
+  },
+  "123": {
+    "label": 2,
+    "reason": "A confound is present and the effect is not identifiable, making the null result uninterpretable.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"A confound is present and the effect is not identifiable, making the null result uninterpretable.\"}"
+  },
+  "1308": {
+    "label": 2,
+    "reason": "The hypothesis uses a point null with no equivalence margin specified, making the null result logically unconfirmable.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"The hypothesis uses a point null with no equivalence margin specified, making the null result logically unconfirmable.\"}"
+  },
+  "2599": {
+    "label": 2,
+    "reason": "Evaluation-awareness/leakage and non-identifiable effect make the null result uninterpretable regardless of other factors.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"Evaluation-awareness/leakage and non-identifiable effect make the null result uninterpretable regardless of other factors.\"}"
+  },
+  "2145": {
+    "label": 2,
+    "reason": "The hypothesis is logically unconfirmable due to a point null with no equivalence margin specified.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"The hypothesis is logically unconfirmable due to a point null with no equivalence margin specified.\"}"
+  },
+  "2217": {
+    "label": 2,
+    "reason": "The measurement is invalid, making the null result uninterpretable regardless of other factors.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"The measurement is invalid, making the null result uninterpretable regardless of other factors.\"}"
+  },
+  "194": {
+    "label": 2,
+    "reason": "The hypothesis is a point null with no equivalence margin specified, making the null result logically unconfirmable.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"The hypothesis is a point null with no equivalence margin specified, making the null result logically unconfirmable.\"}"
+  },
+  "692": {
+    "label": 2,
+    "reason": "A confound is present and the effect is not identifiable, making the null result uninterpretable.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"A confound is present and the effect is not identifiable, making the null result uninterpretable.\"}"
+  },
+  "2465": {
+    "label": 2,
+    "reason": "A confound is present and the effect is not identifiable, making the null result uninterpretable.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"A confound is present and the effect is not identifiable, making the null result uninterpretable.\"}"
+  },
+  "1053": {
+    "label": 2,
+    "reason": "The hypothesis is a point null with no equivalence margin specified, making the null result logically unconfirmable.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"The hypothesis is a point null with no equivalence margin specified, making the null result logically unconfirmable.\"}"
+  },
+  "2649": {
+    "label": 1,
+    "reason": "The intervention strength is extremely low (0.02), making it unlikely to detect an effect even with a reasonable sample size.",
+    "raw": "{\"label\": \"WEAK_INTERVENTION\", \"reason\": \"The intervention strength is extremely low (0.02), making it unlikely to detect an effect even with a reasonable sample size.\"}"
+  },
+  "2986": {
+    "label": 2,
+    "reason": "A confound is present and the effect is not identifiable, making the null result uninterpretable.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"A confound is present and the effect is not identifiable, making the null result uninterpretable.\"}"
+  },
+  "1597": {
+    "label": 2,
+    "reason": "Evaluation-awareness/leakage and non-identifiable effect make the null result uninterpretable regardless of other factors.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"Evaluation-awareness/leakage and non-identifiable effect make the null result uninterpretable regardless of other factors.\"}"
+  },
+  "786": {
+    "label": 2,
+    "reason": "A confound is present and the effect is not identifiable, making the null result uninterpretable.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"A confound is present and the effect is not identifiable, making the null result uninterpretable.\"}"
+  },
+  "1255": {
+    "label": 2,
+    "reason": "The measurement is invalid, making the null result uninterpretable regardless of other factors.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"The measurement is invalid, making the null result uninterpretable regardless of other factors.\"}"
+  },
+  "2957": {
+    "label": 2,
+    "reason": "The measurement is invalid, making the null result uninterpretable regardless of other factors.",
+    "raw": "{\"label\": \"DESIGN_FLAW\", \"reason\": \"The measurement is invalid, making the null result uninterpretable regardless of other factors.\"}"
+  }
+}
